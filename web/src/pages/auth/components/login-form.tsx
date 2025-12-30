@@ -202,7 +202,11 @@ export function LoginForm() {
                   disabled={isSubmitting}
                 >
                   <IconLogin2 />
-                  {isSubmitting ? 'Logging in...' : 'Log in'}
+                  {isSubmitting ? (
+                    <span className='animate-pulse'>Logging in...</span>
+                  ) : (
+                    <span>Log in</span>
+                  )}
                 </Button>
               </FieldGroup>
             </form>
