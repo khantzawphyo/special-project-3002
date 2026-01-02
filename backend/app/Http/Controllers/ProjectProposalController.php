@@ -28,7 +28,7 @@ class ProjectProposalController extends Controller
 
     public function showProposalsList()
     {
-        return ProjectProposalResource::collection(ProjectProposal::all());
+        return ProjectProposalResource::collection(ProjectProposal::with(['supervisor', 'submitter'])->get());
     }
 
     public function approveByIC(ProjectProposal $projectProposal) {}

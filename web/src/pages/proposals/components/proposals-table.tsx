@@ -18,7 +18,7 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import type { ProjectProposal } from "@/types";
-import { IconDownload } from "@tabler/icons-react";
+import { IconDownload, IconRefresh } from "@tabler/icons-react";
 import { Eye, Loader2, Plus, Search, Settings2, Shield, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router";
@@ -45,10 +45,14 @@ const STATUS_COLORS: Record<string, string> = {
 };
 
 interface ProposalsListProp {
+	getProposalsData: () => void;
 	proposalsData: ProjectProposal[];
 }
 
-export function ProposalsList({ proposalsData }: ProposalsListProp) {
+export function ProposalsList({
+	proposalsData,
+	getProposalsData,
+}: ProposalsListProp) {
 	const [searchTerm, setSearchTerm] = useState("");
 	const [debouncedSearch, setDebouncedSearch] = useState("");
 	useEffect(() => {
@@ -76,8 +80,6 @@ export function ProposalsList({ proposalsData }: ProposalsListProp) {
 	const navigate = useNavigate();
 
 	const allStatuses = ["pending", "approved", "rejected"];
-
-	console.log(proposalsData);
 
 	const statusCounts = useMemo(() => {
 		const counts: Record<string, number> = {};
@@ -287,13 +289,22 @@ export function ProposalsList({ proposalsData }: ProposalsListProp) {
 								</DropdownMenuContent>
 							</DropdownMenu>
 
-							<Button
-								className="hover:cursor-pointer bg-cherry-pie-950 hover:bg-cherry-pie-950/80 ml-auto hover:text-white text-white"
-								onClick={() => alert("Downloading...")}
-								variant={"outline"}>
-								<IconDownload />
-								<span>Export</span>
-							</Button>
+							<div className="flex items-center ml-auto gap-x-3">
+								<Button
+									className="hover:cursor-pointer bg-cherry-pie-950 hover:bg-cherry-pie-950/80 ml-auto hover:text-white text-white"
+									onClick={getProposalsData}
+									variant={"outline"}>
+									<IconRefresh />
+									<span>Refresh</span>
+								</Button>
+								<Button
+									className="hover:cursor-pointer bg-cherry-pie-950 hover:bg-cherry-pie-950/80 ml-auto hover:text-white text-white"
+									onClick={() => alert("Downloading...")}
+									variant={"outline"}>
+									<IconDownload />
+									<span>Export</span>
+								</Button>
+							</div>
 						</div>
 
 						{/* Selected Filters Display */}

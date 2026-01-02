@@ -6,6 +6,7 @@ use App\Http\Controllers\FacultyController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectProposalController;
+use App\Http\Resources\ProjectProposalResource;
 use App\Http\Resources\UserResource;
 use App\Models\ProjectProposal;
 use Illuminate\Support\Facades\Auth;
@@ -50,18 +51,5 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 Route::get('/test', function () {
-    return ProjectProposal::where('status', 'pending')->get();
-
-    // $users = User::where('is_student', true)->get();
-    // $students = $users->whereIn('id', [20, 21, 22]);
-    // $studentsData = [];
-
-    // foreach ($students as $student) {
-    //     $studentsData[] = [
-    //         'id' => $student->id,
-    //         'name' => $student->name,
-    //         'email' => $student->email
-    //     ];
-    // }
-    // return $studentsData;
+    return ProjectProposalResource::collection(ProjectProposal::with(['supervisor', 'submitter'])->get());
 });

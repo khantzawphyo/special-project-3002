@@ -19,8 +19,24 @@ class ProjectProposalResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'description' => $this->description,
-            'supervisor' => $this->getSupervisor($this->supervisor_id),
-            'submittedBy' => $this->getSubmittedStudent($this->members[0]),
+            'supervisor' => $this->whenLoaded('supervisor', function ($supervisor) {
+                return [
+                    'id'    => $supervisor->id,
+                    'name'  => $supervisor->name,
+                    'email' => $supervisor->email,
+                    'department' => $supervisor->faculty->department->name,
+                    'rank' => $supervisor->faculty->rank->name
+                ];
+            }),
+            'submittedBy' => $this->whenLoaded('submitter', function ($submitter) {
+                return [
+                    'id'    => $submitter->id,
+                    'name'  => $submitter->name,
+                    'email' => $submitter->email,
+                    'major' => $submitter->student->major->name,
+                    'phone_number' => $submitter->student->phone_number,
+                ];
+            }),
             'students' => $this->getMembers($this->members),
             'file' => $this->fileUrl,
             'status' => $this->status,
