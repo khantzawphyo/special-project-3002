@@ -9,7 +9,7 @@ import { useHeaderInitializer } from "@/hooks/use-header-initializer";
 import RootLayout from "@/layouts/RootLayout";
 import { HasRole } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { IconLoader, IconSend } from "@tabler/icons-react";
+import { IconLoader, IconPencilCheck } from "@tabler/icons-react";
 import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -39,10 +39,10 @@ const ProposalSchema = z.object({
 	fileUrl: z.string().min(1, "Proposal file is required"),
 });
 
-export default function CreateProposalPage() {
+export default function EditProposalPage() {
 	if (!HasRole("Student")) return <UnAuthorized />;
 
-	useHeaderInitializer("MIIT | Project Proposal", "Create Project Proposal");
+	useHeaderInitializer("MIIT | Proposal Editing", "Edit Proposal");
 
 	const {
 		register,
@@ -158,7 +158,7 @@ export default function CreateProposalPage() {
 							<Button
 								type="submit"
 								disabled={isSubmitting}
-								className="hover:cursor-pointer w-full sm:w-fit order-1 sm:order-2 bg-cherry-pie-950 hover:bg-cherry-pie-950/80 hover:text-white text-white"
+								className="hover:cursor-pointer w-full sm:w-fit order-1 sm:order-2 bg-primary-950 hover:bg-cherry-pie-950/80 hover:text-white text-white"
 								variant={"outline"}>
 								{isSubmitting ? (
 									<>
@@ -167,8 +167,8 @@ export default function CreateProposalPage() {
 									</>
 								) : (
 									<>
-										<span>Submit Proposal</span>
-										<IconSend />
+										<span>Update Proposal</span>
+										<IconPencilCheck />
 									</>
 								)}
 							</Button>

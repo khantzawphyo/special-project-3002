@@ -6,6 +6,7 @@ use App\Http\Controllers\FacultyController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectProposalController;
+use App\Http\Resources\ProjectProposalResource;
 use App\Http\Resources\UserResource;
 use App\Models\ProjectProposal;
 use Illuminate\Support\Facades\Auth;
@@ -27,9 +28,11 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::controller(ProjectProposalController::class)->group(function () {
+        Route::get("/proposals", 'index');
         Route::post("/proposals/create", 'store');
-        // Route::get("/proposals/{title:slug}", 'show');
-        Route::get("/proposals/lists", 'showProposalsList');
+        Route::get("/proposals/my", 'show');
+        Route::get("/proposals/{project_proposal:slug}/detail", 'detail');
+        Route::delete("/proposals/{projectProposal}/delete", 'destroy');
     });
 
     Route::controller(ProjectController::class)->group(function () {
@@ -47,21 +50,4 @@ Route::middleware('auth:sanctum')->group(function () {
         $user = Auth::user();
         return new UserResource($user);
     })->middleware('role:IC');
-});
-
-Route::get('/test', function () {
-    return ProjectProposal::where('status', 'pending')->get();
-
-    // $users = User::where('is_student', true)->get();
-    // $students = $users->whereIn('id', [20, 21, 22]);
-    // $studentsData = [];
-
-    // foreach ($students as $student) {
-    //     $studentsData[] = [
-    //         'id' => $student->id,
-    //         'name' => $student->name,
-    //         'email' => $student->email
-    //     ];
-    // }
-    // return $studentsData;
 });

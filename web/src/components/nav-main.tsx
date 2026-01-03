@@ -25,7 +25,7 @@ export function NavMain({
 					<SidebarMenu className="mb-3">
 						<NavLink
 							to={"/project-proposals/create"}
-							className="bg-cherry-pie-950 rounded-2xl transition-transform active:scale-95 flex items-center px-6 gap-2 text-white py-2">
+							className="bg-primary-950 rounded-2xl transition-transform active:scale-95 flex items-center px-6 gap-2 text-white py-2">
 							<IconCirclePlusFilled size={28} />
 							<span>Create Proposal</span>
 						</NavLink>
@@ -37,31 +37,31 @@ export function NavMain({
 							key={item.title}
 							className={({ isActive }) =>
 								[
-									"rounded-md py-2 transition-transform  active:scale-95",
+									"rounded-md py-2 transition-transform active:scale-95",
 									isActive
-										? "bg-background text-black hover:text-black border-l-5 border-l-cherry-pie-950"
+										? "bg-background text-black hover:text-black border-l-5 border-l-primary-950"
 										: "bg-cherry-pie-50 text-black hover:bg-background hover:text-black",
 								].join(" ")
 							}
 							to={item.url}>
-							<p className="flex items-center w-auto w-[120px] gap-x-3 mx-6">
+							<p className="flex items-center w-[120px] w-auto gap-x-3 mx-6">
 								{item.icon && <item.icon size={20} />}
 								<span className="text-[14px]">{item.title}</span>
 							</p>
 						</NavLink>
 						// <SidebarMenuItem key={item.title}>
-						// 	<SidebarMenuButton
-						// 		className="border mb-2 py-5 w-[120px]"
-						// 		tooltip={item.title}>
-						// 		<NavLink
-						// 			className="rounded-xl w-full bg-red-500 bor"
-						// 			to={item.url}>
-						// 			<p className="flex items-center  w-[120px]  gap-x-3 mx-auto py-5 ">
-						// 				{item.icon && <item.icon />}
-						// 				<span className="text-[14px]">{item.title}</span>
-						// 			</p>
-						// 		</NavLink>
-						// 	</SidebarMenuButton>
+						// <SidebarMenuButton
+						//  className="border mb-2 py-5 w-[120px]"
+						//  tooltip={item.title}>
+						//  <NavLink
+						//   className="rounded-xl w-full bg-red-500 bor"
+						//   to={item.url}>
+						//   <p className="flex items-center w-[120px] gap-x-3 mx-auto py-5 ">
+						//    {item.icon && <item.icon />}
+						//    <span className="text-[14px]">{item.title}</span>
+						//   </p>
+						//  </NavLink>
+						// </SidebarMenuButton>
 						// </SidebarMenuItem>
 					))}
 				</SidebarMenu>

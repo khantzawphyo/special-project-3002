@@ -8,39 +8,32 @@ class ProjectProposal extends Model
 {
     protected $fillable = ['title', 'description', 'slug', 'supervisor_id', 'submitted_at', 'fileUrl', 'members', 'status', 'submitted_by'];
 
-    public function getSupervisor($supervisorId)
-    {
-        $user = User::find($supervisorId);
-        return [
-            'name' => $user->name,
-            'email' => $user->email,
-        ];
-    }
-
     public function getMembers($members)
     {
         $users = User::where('is_student', true)->get();
-        $students = $users->whereIn('id', $members);
+        $members = $users->whereIn('id', $members);
         $studentsData = [];
 
-        foreach ($students as $student) {
+        foreach ($members as $member) {
             $studentsData[] = [
-                'id' => $student->id,
-                'name' => $student->name,
-                'email' => $student->email
+                'id' => $member->id,
+                'name' => $member->name,
+                'email' => $member->email,
+                // 'major' => $member->student->major->name,
+                // 'phone_number' => $member->student->phone_number,
             ];
         }
         return $studentsData;
     }
 
-    public function getSubmittedStudent($studentId)
+    public function supervisor()
     {
-        $student = User::find($studentId);
-        return [
-            'id' => $student->id,
-            'name' => $student->name,
-            'email' => $student->email
-        ];
+        return $this->belongsTo(User::class, 'supervisor_id', 'id');
+    }
+
+    public function submitter()
+    {
+        return $this->belongsTo(User::class, 'submitted_by', 'id');
     }
 
     protected $casts = [
