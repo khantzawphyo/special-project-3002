@@ -182,7 +182,7 @@ export function LoginForm() {
                   <Field orientation='horizontal' className='flex-1'>
                     <Checkbox
                       id='checkBox'
-                      className='h-5 w-5 border-2 border-primary-900 data-[state=checked]:bg-primary-900 data-[state=checked]:border-primary-900 transition-all duration-200'
+                      className='size-4 border-2 border-primary-500 data-[state=checked]:bg-primary-700 data-[state=checked]:border-primary-700 transition-all duration-200'
                     />
                     <FieldLabel htmlFor='checkBox' className='font-medium'>
                       Remember Me
