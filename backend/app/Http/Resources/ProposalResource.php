@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Date;
 
-class ProjectProposalResource extends JsonResource
+class ProposalResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

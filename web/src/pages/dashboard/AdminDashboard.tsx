@@ -20,7 +20,6 @@ export default function AdminDashboard() {
 	const fetchDashboardData = async () => {
 		const res = await api.get("/dashboard");
 		setDashboardData(res.data);
-		console.log(res.data);
 	};
 
 	useEffect(() => {

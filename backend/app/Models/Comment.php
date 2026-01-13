@@ -10,7 +10,7 @@ class ProposalComment extends Model
 
     public function proposal()
     {
-        return $this->belongsTo(ProjectProposal::class, "proposal_id");
+        return $this->belongsTo(Proposal::class, "proposal_id");
     }
 
     public function author()

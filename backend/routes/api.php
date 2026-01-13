@@ -1,17 +1,13 @@
 <?php
 
 use App\Http\Controllers\auth\AuthController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\dashboard\DashboardController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\ProjectController;
-use App\Http\Controllers\ProjectProposalController;
-use App\Http\Controllers\ProposalCommentController;
+use App\Http\Controllers\ProposalController;
 use App\Http\Controllers\UserController;
-use App\Http\Resources\CommentResource;
-use App\Http\Resources\UserResource;
-use App\Models\ProposalComment;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use App\Models\Student;
 use Illuminate\Support\Facades\Route;
 
 Route::controller(AuthController::class)->group(function () {
@@ -31,39 +27,36 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get("/faculties/lists", 'showFacultiesList');
     });
 
-    Route::controller(ProjectProposalController::class)->group(function () {
+    Route::controller(ProposalController::class)->group(function () {
         Route::get("/proposals", 'index');
         Route::post("/proposals/create", 'store');
         Route::get("/proposals/my", 'show');
-        Route::get("/proposals/{project_proposal:slug}/detail", 'detail');
-        Route::delete("/proposals/{projectProposal}/delete", 'destroy');
+        Route::get("/proposals/{proposal:slug}/detail", 'detail');
+        Route::post("/proposals/{proposal:slug}/approve", 'approveByIc');
+        Route::post("/proposals/{proposal:slug}/reject", 'rejectByIc');
+        Route::delete("/proposals/{proposal}/delete", 'destroy');
     });
 
-    Route::controller(ProposalCommentController::class)->group(function () {
+    Route::controller(CommentController::class)->group(function () {
         Route::post("/comments/create", 'store');
-        Route::get("/comments/{project_proposal:id}", 'show');
-        Route::delete("/comments/{proposal_comment}", 'destroy');
+        Route::get("/comments/{proposal:id}", 'show');
+        Route::delete("/comments/{comment}", 'destroy');
     });
 
     Route::controller(ProjectController::class)->group(function () {
-        Route::post("/projects", 'index');
+        Route::get("/projects", 'index');
         Route::post("/projects", 'store');
-        Route::get("/projects/lists", 'showProposalsList');
+        Route::get("/projects/project:slug", 'show');
     });
 
     Route::controller(FileController::class)->group(function () {
         Route::post("/upload-to-s3", 'uploadToS3');
         Route::post("/delete-from-s3", 'deleteFromS3');
     });
-
-    Route::get('role-info', function () {
-        $user = Auth::user();
-        return new UserResource($user);
-    })->middleware('role:IC');
 });
 
-
 Route::get("/test", function () {
-    return ProposalComment::with("author")->where('proposal_id', 34)->get();
-    return CommentResource::collection(ProposalComment::with("author")->get());
+    $stu = Student::with(['user', 'major'])->get();
+
+    return $stu;
 });

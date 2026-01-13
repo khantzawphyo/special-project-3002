@@ -1,3 +1,4 @@
+import Loading from "@/components/loading";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -19,7 +20,6 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import type { UsersData } from "@/types";
-import { Loader2 } from "lucide-react";
 import { IconDownload, IconRefresh } from "@tabler/icons-react";
 import {
 	Briefcase,
@@ -34,7 +34,6 @@ import {
 } from "lucide-react";
 import type React from "react";
 import { useMemo, useState } from "react";
-import Loading from "@/components/loading";
 
 const ROLE_ICONS: Record<string, React.ReactNode> = {
 	IC: <Briefcase className="h-4 w-4" />,
@@ -209,7 +208,7 @@ export default function UsersTable({
 								<DropdownMenuTrigger asChild>
 									<Button
 										variant="outline"
-										className="gap-2 bg-transparent">
+										className="gap-2 bg-transparent hidden">
 										<Plus className="h-4 w-4" />
 										<span>Role</span>
 									</Button>
@@ -259,9 +258,7 @@ export default function UsersTable({
 												key={rank}
 												onClick={() => handleRankToggle(rank)}
 												className="flex items-center gap-2 py-2 cursor-pointer hover:bg-muted rounded px-2">
-												<Checkbox
-													checked={selectedRanks.has(rank)}
-												/>
+												<Checkbox checked={selectedRanks.has(rank)} />
 												<span className="flex-1 text-sm">{rank}</span>
 												<span className="text-xs text-muted-foreground">
 													{rankCounts[rank]}
@@ -298,6 +295,7 @@ export default function UsersTable({
 										Email
 									</DropdownMenuCheckboxItem>
 									<DropdownMenuCheckboxItem
+										className="hidden"
 										checked={visibleColumns.has("role")}
 										onCheckedChange={() => handleColumnToggle("role")}>
 										Role
@@ -412,7 +410,9 @@ export default function UsersTable({
 												(sortDirection === "asc" ? "↑" : "↓")}
 										</TableHead>
 									)}
-									{visibleColumns.has("role") && <TableHead>Role</TableHead>}
+									{visibleColumns.has("role") && (
+										<TableHead className="hidden">Role</TableHead>
+									)}
 									{visibleColumns.has("rank") && <TableHead>Rank</TableHead>}
 									{visibleColumns.has("status") && (
 										<TableHead>Status</TableHead>
@@ -456,7 +456,7 @@ export default function UsersTable({
 												</TableCell>
 											)}
 											{visibleColumns.has("role") && (
-												<TableCell>
+												<TableCell className="hidden">
 													<div className="flex items-center gap-2">
 														{ROLE_ICONS[user.role]}
 														<span className="text-sm">{user.role}</span>

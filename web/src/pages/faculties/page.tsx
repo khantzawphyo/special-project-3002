@@ -3,7 +3,7 @@ import { useHeaderInitializer } from "@/hooks/use-header-initializer";
 import RootLayout from "@/layouts/RootLayout";
 import type { UsersData } from "@/types";
 import { useEffect, useState } from "react";
-import UsersTable from "./components/users-table";
+import UsersTable from "./components/faculties-table";
 
 export default function FacultiesPage() {
 	useHeaderInitializer("MIIT| Faculties", "Faculties List");
@@ -13,7 +13,6 @@ export default function FacultiesPage() {
 	const getFacultyData = async () => {
 		const res = await api.get("/faculties/lists");
 		setFacultyData(res.data);
-		console.log(res.data)
 	};
 
 	useEffect(() => {

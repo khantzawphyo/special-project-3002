@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ProjectProposal extends Model
+class Proposal extends Model
 {
-    protected $fillable = ['title', 'description', 'slug', 'supervisor_id', 'submitted_at', 'fileUrl', 'members', 'status', 'submitted_by'];
+    protected $fillable = ['title', 'description', 'slug', 'supervisor_id', 'submitted_at', 'fileUrl', 'members', 'status', 'student_id'];
 
     public function getMembers($members)
     {
@@ -19,8 +19,6 @@ class ProjectProposal extends Model
                 'id' => $member->id,
                 'name' => $member->name,
                 'email' => $member->email,
-                // 'major' => $member->student->major->name,
-                // 'phone_number' => $member->student->phone_number,
             ];
         }
         return $studentsData;
@@ -33,7 +31,7 @@ class ProjectProposal extends Model
 
     public function submitter()
     {
-        return $this->belongsTo(User::class, 'submitted_by', 'id');
+        return $this->belongsTo(User::class, 'student_id', 'id');
     }
 
     public function comments()

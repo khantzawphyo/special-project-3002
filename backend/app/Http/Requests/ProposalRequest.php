@@ -3,8 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
-use App\Models\User;
+use Illuminate\Support\Str;
 
 class ProposalRequest extends FormRequest
 {
@@ -24,28 +23,24 @@ class ProposalRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required',
-            'description' => 'required',
+            'title' => 'required|min:10|max:100',
+            'description' => 'required|min:10|max:300',
             'fileUrl' => 'required',
             'members' => 'required',
-            'submitted_by' => [
-                'required',
-                function ($attribute, $value, $fail) {
-                    $user = User::find($value);
-                    if (!$user || !$user->roles()->where('name', 'Student')->exists()) {
-                        $fail('The selected user must be a Student.');
-                    }
-                },
-            ],
-            'supervisor_id' => [
-                'required',
-                function ($attribute, $value, $fail) {
-                    $user = User::find($value);
-                    if (!$user || !$user->roles()->where('name', 'Faculty')->exists()) {
-                        $fail('The selected supervisor must be a Faculty member.');
-                    }
-                },
-            ],
+            'submitted_by' => 'required|exists:users,id',
+            'supervisor_id' => 'required|exists:users,id'
         ];
+    }
+
+    /**
+     * Handle a passed validation attempt.
+     */
+    protected function passedValidation(): void
+    {
+        $this->merge([
+            'slug' => Str::slug($this->title, '-'),
+            'status' => 'pending',
+            'submitted_at' => now()
+        ]);
     }
 }

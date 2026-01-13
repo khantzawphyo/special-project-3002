@@ -1,12 +1,11 @@
 import { useHeaderInitializer } from "@/hooks/use-header-initializer";
 import RootLayout from "@/layouts/RootLayout";
-import type { UsersData } from "@/types";
 import { HasRole } from "@/lib/utils";
+import type { UsersData } from "@/types";
 import { useState } from "react";
 import UnAuthorized from "../UnAuthorized";
 import UsersTable from "./components/users-table";
 
-// Demo data for supervisors
 const demoSupervisorData: UsersData[] = [
 	{
 		id: 1,
@@ -132,10 +131,9 @@ const demoSupervisorData: UsersData[] = [
 
 export default function SupervisorsPage() {
 	useHeaderInitializer("MIIT| Supervisors", "Project Supervisors");
+	const [supervisorData] = useState<UsersData[]>(demoSupervisorData);
 
 	if (HasRole("Student")) return <UnAuthorized />;
-
-	const [supervisorData] = useState<UsersData[]>(demoSupervisorData);
 
 	return (
 		<RootLayout>
