@@ -1,10 +1,9 @@
 import { useHeaderInitializer } from "@/hooks/use-header-initializer";
-import RootLayout from "@/layouts/RootLayout";
 import { HasRole } from "@/lib/utils";
 import type { UsersData } from "@/types";
 import { useState } from "react";
 import UnAuthorized from "../UnAuthorized";
-import UsersTable from "./components/supervisors-table";
+import SupervisorsTable from "./components/supervisors-table";
 
 const demoSupervisorData: UsersData[] = [
 	{
@@ -136,7 +135,7 @@ export default function SupervisorsPage() {
 	if (HasRole("Student")) return <UnAuthorized />;
 
 	return (
-		<RootLayout>
+		<>
 			<div className="px-4 lg:px-6">
 				<h1 className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
 					Supervisors List
@@ -145,8 +144,8 @@ export default function SupervisorsPage() {
 					Browse and manage project supervisors with their assignments and
 					departments.
 				</p>
-				{supervisorData && <UsersTable supervisorData={supervisorData} />}
+				{supervisorData && <SupervisorsTable supervisorData={supervisorData} />}
 			</div>
-		</RootLayout>
+		</>
 	);
 }

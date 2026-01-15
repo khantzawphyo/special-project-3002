@@ -12,7 +12,7 @@ import {
 import { Shield } from "lucide-react";
 
 import Loading from "@/components/loading";
-import RootLayout from "@/layouts/RootLayout";
+import { useHeaderInitializer } from "@/hooks/use-header-initializer";
 import type { UsersData } from "@/types";
 import { useEffect, useState } from "react";
 
@@ -141,6 +141,7 @@ const demoSupervisorData: UsersData[] = [
 ];
 
 export default function SupervisorDetail() {
+	useHeaderInitializer("MIIT | Supervisor Detail", "Supervisor Detail");
 	const navigate = useNavigate();
 	const { id } = useParams();
 	const [supervisor, setSupervisor] = useState<UsersData | null>(null);
@@ -152,110 +153,106 @@ export default function SupervisorDetail() {
 	}, [id]);
 
 	return (
-		<RootLayout>
-			<main className="min-h-screen bg-neutral-50 dark:bg-neutral-950">
-				<div className="mx-auto max-w-6xl px-4 py-8">
-					<Button
-						onClick={() => navigate("/supervisors")}
-						variant="ghost"
-						className="mb-8 flex items-center gap-2 rounded-lg  px-4 py-2">
-						<ArrowLeftIcon className="h-4 w-4" />
-						Back to Supervisors
-					</Button>
+		<div className="mx-auto max-w-7xl px-4">
+			<Button
+				onClick={() => navigate("/supervisors")}
+				variant="ghost"
+				className="mb-4 flex bg-primary-600 hover:bg-primary-500 text-white hover:cursor-pointer hover:text-white items-center gap-2">
+				<ArrowLeftIcon className="h-4 w-4" />
+				Back to Supervisors
+			</Button>
 
-					{!supervisor ? (
-						<Loading message="supervisor data" />
-					) : (
-						<>
-							<div className="mb-10 flex items-center gap-3">
-								<div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary-600/50 dark:bg-primary-900">
-									<Shield className="h-6 w-6 text-primary-800 dark:text-white" />
-								</div>
-								<div>
-									<h1 className="text-2xl font-bold leading-tight">
-										Supervisor Profile
-									</h1>
-									<p className="text-sm text-muted-foreground">
-										View supervisor information
-									</p>
-								</div>
-							</div>
+			{!supervisor ? (
+				<Loading message="supervisor data" />
+			) : (
+				<>
+					<div className="flex items-center gap-3">
+						<div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary-600/50 dark:bg-primary-900">
+							<Shield className="h-6 w-6 text-primary-800 dark:text-white" />
+						</div>
+						<div>
+							<h1 className="text-2xl font-bold leading-tight">
+								Supervisor Profile
+							</h1>
+							<p className="text-sm text-muted-foreground">
+								View supervisor information
+							</p>
+						</div>
+					</div>
 
-							<div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-								{/* Main Info Card */}
-								<Card className="lg:col-span-2 rounded-2xl border border-neutral-200 shadow-sm dark:border-neutral-800">
-									<CardContent className="p-8">
-										<div className="grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-10">
-											{/* Name */}
-											<div>
-												<p className="text-xs uppercase tracking-wide text-muted-foreground">
-													Full Name
-												</p>
-												<p className="mt-1 text-lg font-semibold">
-													{supervisor.name}
-												</p>
-											</div>
-
-											{/* Rank */}
-											<div>
-												<p className="text-xs uppercase tracking-wide text-muted-foreground">
-													Rank
-												</p>
-												<p className="mt-1 text-lg font-semibold">
-													{supervisor.rank}
-												</p>
-											</div>
-
-											{/* Email */}
-											<div>
-												<p className="text-xs uppercase tracking-wide text-muted-foreground">
-													Email Address
-												</p>
-												<p className="mt-1 flex items-center gap-2 text-base">
-													<EnvelopeIcon className="h-4 w-4 text-muted-foreground" />
-													{supervisor.email}
-												</p>
-											</div>
-
-											{/* Phone */}
-											{supervisor.phoneNumber && (
-												<div>
-													<p className="text-xs uppercase tracking-wide text-muted-foreground">
-														Phone Number
-													</p>
-													<p className="mt-1 flex items-center gap-2 text-base">
-														<PhoneIcon className="h-4 w-4 text-muted-foreground" />
-														{supervisor.phoneNumber}
-													</p>
-												</div>
-											)}
-
-											{/* Department */}
-											{supervisor.departmentName && (
-												<div className="sm:col-span-2">
-													<p className="text-xs uppercase tracking-wide text-muted-foreground">
-														Department
-													</p>
-													<p className="mt-1 text-lg font-semibold">
-														{supervisor.departmentName}
-													</p>
-												</div>
-											)}
-										</div>
-									</CardContent>
-								</Card>
-
-								{/* Side Panel (Optional Future Use) */}
-								<div className="hidden lg:block">
-									<div className="rounded-2xl border border-dashed border-neutral-300 p-6 text-sm text-muted-foreground dark:border-neutral-700">
-										testing
+					<div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+						{/* Main Info Card */}
+						<Card className="lg:col-span-2 rounded-2xl border border-neutral-200 shadow-sm dark:border-neutral-800">
+							<CardContent className="p-8">
+								<div className="grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-10">
+									{/* Name */}
+									<div>
+										<p className="text-xs uppercase tracking-wide text-muted-foreground">
+											Full Name
+										</p>
+										<p className="mt-1 text-lg font-semibold">
+											{supervisor.name}
+										</p>
 									</div>
+
+									{/* Rank */}
+									<div>
+										<p className="text-xs uppercase tracking-wide text-muted-foreground">
+											Rank
+										</p>
+										<p className="mt-1 text-lg font-semibold">
+											{supervisor.rank}
+										</p>
+									</div>
+
+									{/* Email */}
+									<div>
+										<p className="text-xs uppercase tracking-wide text-muted-foreground">
+											Email Address
+										</p>
+										<p className="mt-1 flex items-center gap-2 text-base">
+											<EnvelopeIcon className="h-4 w-4 text-muted-foreground" />
+											{supervisor.email}
+										</p>
+									</div>
+
+									{/* Phone */}
+									{supervisor.phoneNumber && (
+										<div>
+											<p className="text-xs uppercase tracking-wide text-muted-foreground">
+												Phone Number
+											</p>
+											<p className="mt-1 flex items-center gap-2 text-base">
+												<PhoneIcon className="h-4 w-4 text-muted-foreground" />
+												{supervisor.phoneNumber}
+											</p>
+										</div>
+									)}
+
+									{/* Department */}
+									{supervisor.departmentName && (
+										<div className="sm:col-span-2">
+											<p className="text-xs uppercase tracking-wide text-muted-foreground">
+												Department
+											</p>
+											<p className="mt-1 text-lg font-semibold">
+												{supervisor.departmentName}
+											</p>
+										</div>
+									)}
 								</div>
+							</CardContent>
+						</Card>
+
+						{/* Side Panel (Optional Future Use) */}
+						<div className="hidden lg:block">
+							<div className="rounded-2xl border border-dashed border-neutral-300 p-6 text-sm text-muted-foreground dark:border-neutral-700">
+								testing
 							</div>
-						</>
-					)}
-				</div>
-			</main>
-		</RootLayout>
+						</div>
+					</div>
+				</>
+			)}
+		</div>
 	);
 }

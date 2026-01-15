@@ -375,7 +375,7 @@ export default function SupervisorsTable({
 											)}
 											<TableCell className="border">
 												<Link
-													to={`/supervisors/detail/${user.id}`}
+													to={`/supervisors/${user.id}/detail`}
 													className="bg-primary-800 hover:cursor-pointer hover:bg-primary-800/80 flex items-center text-white px-2 py-1.5 rounded-md gap-x-1">
 													<Eye className="size-4" />
 													<span className="text-[12px]">View</span>

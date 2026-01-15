@@ -40,18 +40,20 @@ class ProposalController extends Controller
         }
     }
 
-    public function show()
+    public function myProposals()
     {
-        $proposal = Proposal::where("student_id", Auth::id())
-            ->first();
+        $proposals = Auth::user()->teamProposals()->with(['supervisor', 'leader', 'members'])->get();
+        return $proposals;
 
-        if (!$proposal) {
+        return ProposalResource::collection($proposals->load(['supervisor', 'leader', 'members']));
+
+        if ($proposals->isEmpty()) {
             return response()->json([
                 'message' => 'Proposal not found'
             ], 404);
         }
 
-        return new ProposalResource($proposal->load(['supervisor', 'leader', 'members']));
+        return ProposalResource::collection($proposals->load(['supervisor', 'leader', 'members']));
     }
 
     public function approveByIc(Proposal $proposal)
@@ -86,6 +88,19 @@ class ProposalController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Failed to retrieve proposal details',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function browseProposals()
+    {
+        try {
+            $proposals = Proposal::where('supervisor_id', 11)->with(['supervisor', 'leader', 'members'])->get();
+            return ProposalResource::collection($proposals);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Failed to retrieve proposals',
                 'error' => $e->getMessage()
             ], 500);
         }

@@ -116,7 +116,7 @@ export default function ProposalDetail() {
 			<div className="min-h-screen">
 				<div className="mx-auto max-w-7xl px-4">
 					<Button
-						onClick={() => navigate("/project-proposals/submission")}
+						onClick={() => navigate(-1)}
 						variant="ghost"
 						className="mb-4 flex bg-primary-600 hover:bg-primary-500 text-white hover:cursor-pointer hover:text-white items-center gap-2">
 						<ArrowLeftIcon className="h-4 w-4" />
@@ -136,7 +136,7 @@ export default function ProposalDetail() {
 								<CardContent className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
 									<div>
 										<h1 className="text-2xl font-bold ">{proposal.title}</h1>
-										<div className="mt-2 flex flex-wrap items-center gap-3 text-sm  ">
+										<div className="mt-2 flex flex-wrap items-center gap-3 text-sm">
 											<Badge className={getStatusColor(proposal.status)}>
 												<span className="font-mono">
 													{proposal.status.toUpperCase()}

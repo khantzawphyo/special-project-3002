@@ -86,7 +86,7 @@ export default function CommentBox({
 		z.infer<typeof CommentSchema>
 	>({
 		resolver: zodResolver(CommentSchema),
-		defaultValues: { proposal_id : proposalId, description: "" },
+		defaultValues: { proposal_id: proposalId, description: "" },
 	});
 
 	const onSubmit = async (data: z.infer<typeof CommentSchema>) => {

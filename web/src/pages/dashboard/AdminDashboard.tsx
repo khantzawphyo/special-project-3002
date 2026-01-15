@@ -2,7 +2,6 @@ import api from "@/api/api";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useHeaderInitializer } from "@/hooks/use-header-initializer";
-import RootLayout from "@/layouts/RootLayout";
 import { IconDownload } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { AdminCards } from "./components/admin-cards";
@@ -27,7 +26,7 @@ export default function AdminDashboard() {
 	}, []);
 
 	return (
-		<RootLayout>
+		<>
 			<div className="max-w-7xl mx-auto">
 				<div className="space-y-4 mb-8 ">
 					<div className="mx-6 hidden">
@@ -71,6 +70,6 @@ export default function AdminDashboard() {
 					)}
 				</Card>
 			</div>
-		</RootLayout>
+		</>
 	);
 }
