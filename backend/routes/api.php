@@ -6,9 +6,11 @@ use App\Http\Controllers\dashboard\DashboardController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProposalController;
+use App\Http\Controllers\TeamController;
 use App\Http\Controllers\UserController;
 use App\Http\Resources\ProposalResource;
 use App\Models\Proposal;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::controller(AuthController::class)->group(function () {
@@ -31,11 +33,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::controller(ProposalController::class)->group(function () {
         Route::get("/proposals", 'index');
         Route::post("/proposals/create", 'store');
-        Route::get("/proposals/my", 'show');
+        Route::get("/proposals/my-proposals", 'myProposals');
+        Route::get("/proposals/browse-proposals", 'browseProposals');
         Route::get("/proposals/{proposal:slug}/detail", 'detail');
         Route::delete("/proposals/{proposal}/delete", 'destroy');
-        Route::post("/proposals/{proposal}/approve", 'approveByIc');
-        Route::post("/proposals/{proposal}/reject", 'rejectByIc');
+        Route::post("/proposals/{proposal}/approve", 'approveByIC');
+        Route::post("/proposals/{proposal}/reject", 'rejectByIC');
     });
 
     Route::controller(CommentController::class)->group(function () {
@@ -46,8 +49,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::controller(ProjectController::class)->group(function () {
         Route::get("/projects", 'index');
-        Route::post("/projects", 'store');
         Route::get("/projects/project:slug", 'show');
+    });
+
+    Route::controller(TeamController::class)->group(function () {
+        Route::get("/teams", 'index');
     });
 
     Route::controller(FileController::class)->group(function () {
@@ -57,6 +63,6 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 Route::get("/test", function () {
-    $proposal = Proposal::find(1);
-    return new ProposalResource($proposal->load('members'));
+    $proposals = Auth::user()->teamProposals()->with(['supervisor', 'leader', 'members'])->get();
+    return $proposals;
 });

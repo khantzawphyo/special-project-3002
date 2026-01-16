@@ -1,6 +1,6 @@
 import Loading from "@/components/loading";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
 	DropdownMenu,
 	DropdownMenuCheckboxItem,
@@ -18,9 +18,10 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
+import { cn, STATUS_COLOR } from "@/lib/utils";
 import type { UsersData } from "@/types";
 import { IconDownload, IconRefresh } from "@tabler/icons-react";
-import { Eye, Plus, Search, Settings2, Shield, X } from "lucide-react";
+import { Eye, Search, Settings2, Shield } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link } from "react-router";
 
@@ -30,7 +31,6 @@ export default function SupervisorsTable({
 	supervisorData: UsersData[];
 }) {
 	const [searchTerm, setSearchTerm] = useState("");
-	const [selectedRanks, setSelectedRanks] = useState<Set<string>>(new Set());
 	const [currentPage, setCurrentPage] = useState(1);
 	const [visibleColumns, setVisibleColumns] = useState<Set<string>>(
 		new Set(["name", "email", "role", "rank", "status", "department"]),
@@ -39,35 +39,12 @@ export default function SupervisorsTable({
 	const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
 	const itemsPerPage = 10;
 
-	const allRanks = [
-		"Rector",
-		"Pro-Rector",
-		"Professor",
-		"Associate Professor",
-		"Lecturer",
-		"Assistant Lecturer",
-		"Tutor",
-	];
-
-	const rankCounts = useMemo(() => {
-		const counts: Record<string, number> = {};
-		allRanks.forEach((rank) => {
-			counts[rank] = 0;
-		});
-		supervisorData.forEach((user) => {
-			counts[user?.rank] = (counts[user?.rank] ?? 0) + 1;
-		});
-		return counts;
-	}, [supervisorData]);
-
 	const filteredUsers = useMemo(() => {
 		const filtered = supervisorData.filter((user) => {
 			const matchesSearch =
 				user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
 				user.email.toLowerCase().includes(searchTerm.toLowerCase());
-			const matchesRank =
-				selectedRanks.size === 0 ? true : selectedRanks.has(user.rank);
-			return matchesSearch && matchesRank;
+			return matchesSearch;
 		});
 
 		if (sortColumn) {
@@ -86,28 +63,14 @@ export default function SupervisorsTable({
 		}
 
 		return filtered;
-	}, [supervisorData, searchTerm, selectedRanks, sortColumn, sortDirection]);
+	}, [supervisorData, searchTerm, sortColumn, sortDirection]);
 
-	const paginatedUsers = useMemo(() => {
+	const paginatedSupervisor = useMemo(() => {
 		const start = (currentPage - 1) * itemsPerPage;
 		return filteredUsers.slice(start, start + itemsPerPage);
 	}, [filteredUsers, currentPage]);
 
 	const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
-
-	const handleRankToggle = (rank: string) => {
-		const newRanks = new Set(selectedRanks);
-		if (newRanks.has(rank)) {
-			newRanks.delete(rank);
-		} else {
-			newRanks.add(rank);
-		}
-		setSelectedRanks(newRanks);
-	};
-
-	const handleResetRanks = () => {
-		setSelectedRanks(new Set());
-	};
 
 	const handleColumnToggle = (column: string) => {
 		const newColumns = new Set(visibleColumns);
@@ -135,7 +98,7 @@ export default function SupervisorsTable({
 			) : (
 				<div className="space-y-4 mt-5">
 					{/* Search and Filters */}
-					<div className="flex flex-col gap-4">
+					<div className="flex flex-col md:flex-row gap-4">
 						<div className="flex gap-3">
 							<div className="relative flex-1 max-w-sm">
 								<Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -149,38 +112,6 @@ export default function SupervisorsTable({
 									}}
 								/>
 							</div>
-							{/* Rank Filter Button */}
-							<DropdownMenu>
-								<DropdownMenuTrigger asChild>
-									<Button
-										variant="outline"
-										className="gap-2 bg-transparent">
-										<Plus className="h-4 w-4" />
-										<span>Rank</span>
-									</Button>
-								</DropdownMenuTrigger>
-								<DropdownMenuContent
-									align="start"
-									className="w-56">
-									<DropdownMenuLabel>Filter by Rank</DropdownMenuLabel>
-									<DropdownMenuSeparator />
-									<div className="p-2">
-										{allRanks.map((rank) => (
-											<div
-												key={rank}
-												onClick={() => handleRankToggle(rank)}
-												className="flex items-center gap-2 py-2 cursor-pointer hover:bg-muted rounded px-2">
-												<Checkbox checked={selectedRanks.has(rank)} />
-												<span className="flex-1 text-sm">{rank}</span>
-												<span className="text-xs text-muted-foreground">
-													{rankCounts[rank]}
-												</span>
-											</div>
-										))}
-									</div>
-								</DropdownMenuContent>
-							</DropdownMenu>
-
 							{/* View Toggle Button */}
 							<DropdownMenu>
 								<DropdownMenuTrigger asChild>
@@ -228,71 +159,26 @@ export default function SupervisorsTable({
 									</DropdownMenuCheckboxItem>
 								</DropdownMenuContent>
 							</DropdownMenu>
-
-							<div className="flex items-center ml-auto gap-x-3">
-								<Button
-									className="hover:cursor-pointer bg-primary-800 hover:bg-primary-800/80 ml-auto hover:text-white text-white"
-									onClick={() => alert("Refreshing...")}
-									variant={"outline"}>
-									<IconRefresh />
-									<span>Refresh</span>
-								</Button>
-								<Button
-									className="hover:cursor-pointer bg-primary-800 hover:bg-primary-800/80 ml-auto hover:text-white text-white"
-									onClick={() => alert("Downloading...")}
-									variant={"outline"}>
-									<IconDownload />
-									<span>Export</span>
-								</Button>
-							</div>
 						</div>
-
-						<div className="flex flex-wrap items-center gap-3 pt-2 border-t border-border">
-							{/* Combined selected filters and controls */}
-							<div className="flex flex-wrap items-center gap-2">
-								{/* Count badge for selected filters */}
-								{selectedRanks.size > 0 && (
-									<span className="text-sm text-muted-foreground ">
-										{selectedRanks.size} selected
-									</span>
-								)}
-
-								{/* Selected rank pills */}
-								{Array.from(selectedRanks).map((rank) => (
-									<button
-										key={rank}
-										onClick={() => handleRankToggle(rank)}
-										className="bg-primary-950 px-2 rounded-full text-white hover:underline text-[12px]">
-										{rank}
-									</button>
-								))}
-
-								{/* Reset and Close buttons */}
-								{selectedRanks.size > 0 && (
-									<>
-										<Button
-											variant="ghost"
-											size="sm"
-											onClick={() => {
-												handleResetRanks();
-											}}
-											className="h-auto py-0 px-0 text-sm text-muted-foreground hover:text-foreground">
-											Reset
-										</Button>
-										<Button
-											variant="ghost"
-											size="sm"
-											onClick={() => {
-												handleResetRanks();
-											}}
-											className="h-auto py-0 px-0 text-muted-foreground hover:text-foreground">
-											<X className="h-4 w-4" />
-										</Button>
-									</>
-								)}
-							</div>
+						<div className="flex items-center ml-auto gap-x-3">
+							<Button
+								className="hover:cursor-pointer bg-primary-800 hover:bg-primary-800/80 ml-auto hover:text-white text-white"
+								onClick={() => alert("Refreshing...")}
+								variant={"outline"}>
+								<IconRefresh />
+								<span>Refresh</span>
+							</Button>
+							<Button
+								className="hover:cursor-pointer bg-primary-800 hover:bg-primary-800/80 ml-auto hover:text-white text-white"
+								onClick={() => alert("Downloading...")}
+								variant={"outline"}>
+								<IconDownload />
+								<span>Export</span>
+							</Button>
 						</div>
 					</div>
+
+					<div className="pt-2 border-t border-border"></div>
 
 					{/* Table */}
 					<div className="rounded-lg border border-border">
@@ -321,7 +207,7 @@ export default function SupervisorsTable({
 								</TableRow>
 							</TableHeader>
 							<TableBody>
-								{paginatedUsers.length === 0 ? (
+								{paginatedSupervisor.length === 0 ? (
 									<TableRow className="">
 										<TableCell
 											colSpan={visibleColumns.size + 1}
@@ -340,42 +226,44 @@ export default function SupervisorsTable({
 										</TableCell>
 									</TableRow>
 								) : (
-									paginatedUsers.map((user) => (
+									paginatedSupervisor.map((supervisor) => (
 										<TableRow
-											key={user.id}
+											key={supervisor.id}
 											className="px-3">
 											{visibleColumns.has("name") && (
-												<TableCell>{user.name}</TableCell>
+												<TableCell>{supervisor.name}</TableCell>
 											)}
 											{visibleColumns.has("email") && (
-												<TableCell className="text-muted-foreground">
-													{user.email}
-												</TableCell>
+												<TableCell>{supervisor.email}</TableCell>
 											)}
 											{visibleColumns.has("role") && (
 												<TableCell>
 													<div className="flex items-center gap-2">
 														<Shield className="h-4 w-4 text-primary-700" />
-														<span className="text-sm">{user.role}</span>
+														<span className="text-sm">{supervisor.role}</span>
 													</div>
 												</TableCell>
 											)}
 											{visibleColumns.has("rank") && (
-												<TableCell>{user.rank}</TableCell>
+												<TableCell>{supervisor.rank}</TableCell>
 											)}
 											{visibleColumns.has("status") && (
 												<TableCell>
-													<span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200">
-														{user.status}
-													</span>
+													<Badge
+														className={cn(
+															STATUS_COLOR("active"),
+															"px-3 font-mono rounded-md capitalize",
+														)}>
+														{supervisor.status}
+													</Badge>
 												</TableCell>
 											)}
 											{visibleColumns.has("department") && (
-												<TableCell>{user.departmentName}</TableCell>
+												<TableCell>{supervisor.departmentName}</TableCell>
 											)}
 											<TableCell className="border">
 												<Link
-													to={`/supervisors/detail/${user.id}`}
+													to={`/supervisors/${supervisor.id}/detail`}
 													className="bg-primary-800 hover:cursor-pointer hover:bg-primary-800/80 flex items-center text-white px-2 py-1.5 rounded-md gap-x-1">
 													<Eye className="size-4" />
 													<span className="text-[12px]">View</span>
@@ -409,6 +297,10 @@ export default function SupervisorsTable({
 											key={pageNum}
 											variant={currentPage === pageNum ? "default" : "outline"}
 											size="sm"
+											className={cn(
+												currentPage === pageNum &&
+													"bg-primary-800 hover:cursor-pointer hover:bg-primary-800/80",
+											)}
 											onClick={() => setCurrentPage(pageNum)}>
 											{pageNum}
 										</Button>

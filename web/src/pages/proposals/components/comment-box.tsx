@@ -86,7 +86,7 @@ export default function CommentBox({
 		z.infer<typeof CommentSchema>
 	>({
 		resolver: zodResolver(CommentSchema),
-		defaultValues: { proposal_id : proposalId, description: "" },
+		defaultValues: { proposal_id: proposalId, description: "" },
 	});
 
 	const onSubmit = async (data: z.infer<typeof CommentSchema>) => {
@@ -150,12 +150,10 @@ export default function CommentBox({
 									animate={cardMotion.animate}
 									exit={cardMotion.exit}
 									transition={cardMotion.transition}
-									className="group rounded-lg border border-gray-100 p-4 bg-white hover:border-gray-300 transition-colors">
+									className="group rounded-lg border border-gray-100 p-4  hover:border-gray-300 transition-colors">
 									<div className="flex items-center justify-between mb-2">
 										<div className="flex items-center gap-2">
-											<p className="font-bold text-sm text-gray-900">
-												{c.author.name}
-											</p>
+											<p className="font-bold text-sm">{c.author.name}</p>
 											<Badge
 												variant="outline"
 												className={`${roleColor(
@@ -171,23 +169,21 @@ export default function CommentBox({
 										</span>
 									</div>
 
-									<p className="text-sm text-gray-700 leading-relaxed">
-										{c.description}
-									</p>
+									<p className="text-sm leading-relaxed">{c.description}</p>
 
 									{/* Show actions only if it"s the user"s own comment */}
-									{(authUser.id === c.author.id || isPendingProposal) && (
+									{isPendingProposal && authUser.id === c.author.id && (
 										<div className="flex gap-x-2 justify-end items-center mt-2">
 											<Button
 												size={"sm"}
-												className="text-xs gap-2 bg-yellow-300 font-semibold text-yellow-900 hover:bg-yellow-500 hover:text-white">
-												<PencilSquareIcon className="h-3 w-3" /> Edit
+												className="bg-yellow-300 font-semibold text-yellow-900 hover:bg-yellow-500 hover:text-white">
+												<PencilSquareIcon />
 											</Button>
 											<Button
 												size={"sm"}
 												onClick={() => handleDelete(c.id)}
-												className="text-xs gap-2 bg-red-300 font-semibold text-red-900 hover:bg-red-500 hover:text-white">
-												<TrashIcon className="h-3 w-3" /> Delete
+												className="bg-red-300 font-semibold text-red-900 hover:bg-red-500 hover:text-white">
+												<TrashIcon />
 											</Button>
 										</div>
 									)}

@@ -18,9 +18,10 @@ return new class extends Migration
             $table->text('description');
             $table->text('mid_report');
             $table->text('final_report');
-            $table->enum('status', ['active', 'in_progress', 'completed'])->default('active');
+            $table->enum('status', ['active', 'completed', 'under review'])->default('active');
             $table->timestamp('start_date');
             $table->timestamp('end_date');
+            $table->foreignId('leader_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('proposal_id')->constrained('proposals')->cascadeOnDelete();
             $table->foreignId('supervisor_id')->constrained('users')->cascadeOnDelete();
         });

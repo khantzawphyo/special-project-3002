@@ -18,18 +18,12 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
+import { cn, STATUS_COLOR } from "@/lib/utils";
 import type { ProjectProposal } from "@/types";
 import { IconDownload, IconRefresh } from "@tabler/icons-react";
 import { Eye, Loader2, Plus, Search, Settings2, Shield, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router";
-
-const STATUS_COLORS: Record<string, string> = {
-	pending: "bg-yellow-100 text-yellow-800",
-	approved: "bg-green-100 text-green-800",
-	rejected: "bg-red-100 text-red-800",
-};
-
 interface ProposalsTableProp {
 	getProposalsData: () => void;
 	proposalData: ProjectProposal[];
@@ -172,10 +166,10 @@ export default function ProposalTable({
 			{proposalData.length === 0 ? (
 				<Loading message="project proposals" />
 			) : (
-				<div className="space-y-4">
+				<div className="space-y-4 mt-5">
 					{/* Search and Filters */}
-					<div className="flex flex-col gap-4">
-						<div className="flex gap-3">
+					<div className="flex flex-col md:flex-row gap-4">
+						<div className="flex  gap-3">
 							<div className="relative flex-1 max-w-sm">
 								<Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
 								<Input
@@ -276,66 +270,67 @@ export default function ProposalTable({
 									</DropdownMenuCheckboxItem>
 								</DropdownMenuContent>
 							</DropdownMenu>
-
-							<div className="flex gap-x-2 ml-auto">
-								<Button
-									className="hover:cursor-pointer bg-primary-800 hover:bg-primary-800/80 ml-auto hover:text-white text-white"
-									onClick={handleRefresh}
-									variant={"outline"}>
-									{isRefreshing ? (
-										<Loader2 className="h-4 w-4 animate-spin" />
-									) : (
-										<IconRefresh className="h-4 w-4" />
-									)}
-									<span>{isRefreshing ? "Refreshing..." : "Refresh"}</span>
-								</Button>
-								<Button
-									className="hover:cursor-pointer bg-primary-800 hover:bg-primary-800/80 ml-auto hover:text-white text-white"
-									onClick={() => alert("Downloading...")}
-									variant={"outline"}>
-									<IconDownload />
-									<span>Export</span>
-								</Button>
-							</div>
 						</div>
 
-						{/* Selected Filters Display */}
-						<div className="flex flex-wrap items-center gap-3 pt-2 border-t border-border">
-							<div className="flex flex-wrap items-center gap-2">
-								{selectedStatuses.size > 0 && (
-									<span className="text-sm text-muted-foreground">
-										{selectedStatuses.size} selected
-									</span>
+						{/* refresh and export as excel */}
+						<div className="flex gap-x-2 ml-auto">
+							<Button
+								className="hover:cursor-pointer bg-primary-800 hover:bg-primary-800/80 hover:text-white text-white"
+								onClick={handleRefresh}
+								variant={"outline"}>
+								{isRefreshing ? (
+									<Loader2 className="h-4 w-4 animate-spin" />
+								) : (
+									<IconRefresh className="h-4 w-4" />
 								)}
+								<span>{isRefreshing ? "Refreshing..." : "Refresh"}</span>
+							</Button>
+							<Button
+								className="hover:cursor-pointer bg-primary-800 hover:bg-primary-800/80 hover:text-white text-white"
+								onClick={() => alert("Downloading...")}
+								variant={"outline"}>
+								<IconDownload />
+								<span>Export</span>
+							</Button>
+						</div>
+					</div>
+					
+					{/* Selected Filters Display */}
+					<div className="flex flex-wrap items-center gap-3 pt-2 border-t border-border ">
+						<div className="flex flex-wrap items-center gap-2">
+							{selectedStatuses.size > 0 && (
+								<span className="text-sm text-muted-foreground">
+									{selectedStatuses.size} selected
+								</span>
+							)}
 
-								{Array.from(selectedStatuses).map((status) => (
-									<button
-										key={status}
-										onClick={() => handleStatusToggle(status)}
-										className="bg-primary-950 px-2 rounded-full text-white hover:underline text-[12px]">
-										{status}
-									</button>
-								))}
+							{Array.from(selectedStatuses).map((status) => (
+								<button
+									key={status}
+									onClick={() => handleStatusToggle(status)}
+									className="bg-primary-950 px-2 rounded-full text-white hover:underline text-[12px]">
+									{status}
+								</button>
+							))}
 
-								{selectedStatuses.size > 0 && (
-									<>
-										<Button
-											variant="ghost"
-											size="sm"
-											onClick={handleResetStatus}
-											className="h-auto py-0 px-0 text-sm text-muted-foreground hover:text-foreground">
-											Reset
-										</Button>
-										<Button
-											variant="ghost"
-											size="sm"
-											onClick={handleResetStatus}
-											className="h-auto hidden py-0 px-0 text-muted-foreground hover:text-foreground">
-											<X className="h-4 w-4" />
-										</Button>
-									</>
-								)}
-							</div>
+							{selectedStatuses.size > 0 && (
+								<>
+									<Button
+										variant="ghost"
+										size="sm"
+										onClick={handleResetStatus}
+										className="h-auto py-0 px-0 text-sm text-muted-foreground hover:text-foreground">
+										Reset
+									</Button>
+									<Button
+										variant="ghost"
+										size="sm"
+										onClick={handleResetStatus}
+										className="h-auto hidden py-0 px-0 text-muted-foreground hover:text-foreground">
+										<X className="h-4 w-4" />
+									</Button>
+								</>
+							)}
 						</div>
 					</div>
 
@@ -449,8 +444,12 @@ export default function ProposalTable({
 											)}
 
 											{visibleColumns.has("status") && (
-												<TableCell className="capitalize">
-													<Badge className={STATUS_COLORS[project.status]}>
+												<TableCell>
+													<Badge
+														className={cn(
+															STATUS_COLOR(project.status),
+															"px-3 font-mono rounded-md capitalize",
+														)}>
 														{project.status}
 													</Badge>
 												</TableCell>
@@ -458,7 +457,7 @@ export default function ProposalTable({
 
 											<TableCell className="border">
 												<Link
-													to={`/project-proposals/detail/${project.slug}`}
+													to={`/project-proposals/${project.slug}/detail`}
 													className="bg-primary-800 hover:cursor-pointer hover:bg-primary-800/80 flex items-center text-white px-2 py-1.5 rounded-md gap-x-1">
 													<Eye className="size-4" />
 													<span className="text-[12px]">View</span>

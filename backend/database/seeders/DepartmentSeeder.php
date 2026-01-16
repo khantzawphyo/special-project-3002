@@ -23,7 +23,6 @@ class DepartmentSeeder extends Seeder
             ['name' => 'Department of Information Technology'],
             ['name' => 'Department of Natural Science'],
             ['name' => 'Department of English'],
-
         ]);
     }
 }
