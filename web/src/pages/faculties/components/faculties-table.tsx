@@ -1,4 +1,5 @@
 import Loading from "@/components/loading";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -18,7 +19,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { cn } from "@/lib/utils";
+import { cn, STATUS_COLOR } from "@/lib/utils";
 import type { UsersData } from "@/types";
 import { IconDownload, IconRefresh } from "@tabler/icons-react";
 import {
@@ -421,7 +422,7 @@ export default function UsersTable({
 									{visibleColumns.has("department") && (
 										<TableHead>Department</TableHead>
 									)}
-									<TableHead className="w-12">Action</TableHead>
+									<TableHead className="w-12 hidden">Action</TableHead>
 								</TableRow>
 							</TableHeader>
 							<TableBody>
@@ -469,15 +470,19 @@ export default function UsersTable({
 											)}
 											{visibleColumns.has("status") && (
 												<TableCell>
-													<span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200">
+													<Badge
+														className={cn(
+															STATUS_COLOR("active"),
+															"px-3 font-mono rounded-md capitalize",
+														)}>
 														{user.status}
-													</span>
+													</Badge>
 												</TableCell>
 											)}
 											{visibleColumns.has("department") && (
 												<TableCell>{user.departmentName}</TableCell>
 											)}
-											<TableCell className="border">
+											<TableCell className="border hidden">
 												<Link
 													to={`/supervisors/detail/${user.id}`}
 													className="bg-primary-800 hover:cursor-pointer hover:bg-primary-800/80 flex items-center text-white px-2 py-1.5 rounded-md gap-x-1">

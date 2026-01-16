@@ -26,26 +26,17 @@ export default function AdminDashboard() {
 	}, []);
 
 	return (
-		<>
-			<div className="max-w-7xl mx-auto">
-				<div className="space-y-4 mb-8 ">
-					<div className="mx-6 hidden">
-						<h2 className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
-							Project Overview
-						</h2>
-						<p className="text-sm text-neutral-500">
-							Monitoring student proposals, supervisor assignments, and system
-							progress.
-						</p>
-					</div>
-					{dashboardData && (
-						<AdminCards noOfProposals={dashboardData?.noOfProposals} />
-					)}
-				</div>
+		<div className="max-w-7xl mx-auto">
+			<div className="space-y-4 mb-8">
+				{dashboardData && (
+					<AdminCards noOfProposals={dashboardData?.noOfProposals} />
+				)}
+			</div>
 
-				<div className="flex flex-row items-center justify-between px-6">
+			<Card className="shadow-2xs px-6">
+				<div className="flex flex-row items-center justify-between">
 					<div className="space-y-1">
-						<h3 className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
+						<h3 className="text-xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
 							Projects Progress
 						</h3>
 						<p className="text-sm text-neutral-500">
@@ -53,23 +44,19 @@ export default function AdminDashboard() {
 						</p>
 					</div>
 					<Button
-						className="hover:cursor-pointer bg-primary-950 hover:bg-primary-950/80 hover:text-white text-white"
+						className="hover:cursor-pointer bg-primary-700 hover:bg-primary-700/80 hover:text-white text-white"
 						onClick={() => alert("Downloading...")}
 						variant={"outline"}>
 						<IconDownload />
 						<span>Export</span>
 					</Button>
 				</div>
-				<Card className="mx-6 my-5 shadow-2xs">
-					{false ? (
-						<h2 className="text-center text-3xl my-5 font-bold">
-							Coming Soon!
-						</h2>
-					) : (
-						<ProjectsChart />
-					)}
-				</Card>
-			</div>
-		</>
+				{false ? (
+					<h2 className="text-center text-3xl my-5 font-bold">Coming Soon!</h2>
+				) : (
+					<ProjectsChart />
+				)}
+			</Card>
+		</div>
 	);
 }

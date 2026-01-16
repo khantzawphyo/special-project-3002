@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProposalRequest;
 use App\Http\Resources\ProposalResource;
+use App\Models\Project;
 use App\Models\Proposal;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ProposalController extends Controller
 {
@@ -56,22 +58,34 @@ class ProposalController extends Controller
         return ProposalResource::collection($proposals->load(['supervisor', 'leader', 'members']));
     }
 
-    public function approveByIc(Proposal $proposal)
+    public function approveByIC(Proposal $proposal)
     {
-        $proposal->update([
-            'status' => 'approved'
-        ]);
+        return DB::transaction(function () use ($proposal) {
+            $proposal->update(['status' => 'approved']);
 
-        return $proposal;
+            $project = Project::create([
+                'title'         => $proposal->title,
+                'description'   => $proposal->description,
+                'leader_id'     => $proposal->student_id,
+                'supervisor_id' => $proposal->supervisor_id,
+                'proposal_id'   => $proposal->id,
+            ]);
+
+            // Sync Team Members from Proposal Pivot to Project Pivot
+            $memberIds = $proposal->members()->pluck('user_id');
+            $project->members()->attach($memberIds);
+
+            return response()->json(['message' => 'Proposal transformed to Project successfully!']);
+        });
     }
 
-    public function rejectByIc(Proposal $proposal)
+    public function rejectByIC(Proposal $proposal)
     {
         $proposal->update([
             'status' => 'rejected'
         ]);
 
-        return $proposal;
+        return response()->json(['message' => 'Proposal Rejected!']);
     }
 
     public function detail(Proposal $proposal)

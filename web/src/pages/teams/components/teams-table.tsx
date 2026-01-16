@@ -1,6 +1,6 @@
 import Loading from "@/components/loading";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
 	DropdownMenu,
 	DropdownMenuCheckboxItem,
@@ -18,96 +18,39 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import type { UsersData } from "@/types";
-import { IconDownload, IconRefresh } from "@tabler/icons-react";
-import { Eye, Plus, Search, Settings2, Shield, X } from "lucide-react";
+import { cn, STATUS_COLOR } from "@/lib/utils";
+import type { TeamsData } from "@/types";
+import { IconDownload, IconRefresh, IconUserCheck } from "@tabler/icons-react";
+import { Eye, Search, Settings2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link } from "react-router";
 
-export default function TeamsTable({
-	supervisorData,
-}: {
-	supervisorData: UsersData[];
-}) {
+export default function TeamsTable({ teamsData }: { teamsData: TeamsData[] }) {
 	const [searchTerm, setSearchTerm] = useState("");
-	const [selectedRanks, setSelectedRanks] = useState<Set<string>>(new Set());
 	const [currentPage, setCurrentPage] = useState(1);
 	const [visibleColumns, setVisibleColumns] = useState<Set<string>>(
-		new Set(["name", "email", "role", "rank", "status", "department"]),
+		new Set(["title", "leader", "members", "status", "started_at"]),
 	);
-	const [sortColumn, setSortColumn] = useState<string | null>(null);
-	const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
 	const itemsPerPage = 10;
 
-	const allRanks = [
-		"Rector",
-		"Pro-Rector",
-		"Professor",
-		"Associate Professor",
-		"Lecturer",
-		"Assistant Lecturer",
-		"Tutor",
-	];
-
-	const rankCounts = useMemo(() => {
-		const counts: Record<string, number> = {};
-		allRanks.forEach((rank) => {
-			counts[rank] = 0;
-		});
-		supervisorData.forEach((user) => {
-			counts[user?.rank] = (counts[user?.rank] ?? 0) + 1;
-		});
-		return counts;
-	}, [supervisorData]);
-
-	const filteredUsers = useMemo(() => {
-		const filtered = supervisorData.filter((user) => {
+	const filteredTeams = useMemo(() => {
+		const filtered = teamsData.filter((team) => {
 			const matchesSearch =
-				user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-				user.email.toLowerCase().includes(searchTerm.toLowerCase());
-			const matchesRank =
-				selectedRanks.size === 0 ? true : selectedRanks.has(user.rank);
-			return matchesSearch && matchesRank;
+				team.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+				team.leader?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+				team.status?.toLowerCase().includes(searchTerm.toLowerCase());
+			return matchesSearch;
 		});
-
-		if (sortColumn) {
-			filtered.sort((a, b) => {
-				let aVal: any = a[sortColumn as keyof UsersData];
-				let bVal: any = b[sortColumn as keyof UsersData];
-
-				if (typeof aVal === "string") {
-					aVal = aVal.toLowerCase();
-					bVal = (bVal as string).toLowerCase();
-				}
-
-				const comparison = aVal < bVal ? -1 : aVal > bVal ? 1 : 0;
-				return sortDirection === "asc" ? comparison : -comparison;
-			});
-		}
 
 		return filtered;
-	}, [supervisorData, searchTerm, selectedRanks, sortColumn, sortDirection]);
+	}, [teamsData, searchTerm]);
 
-	const paginatedUsers = useMemo(() => {
+	const paginatedTeams = useMemo(() => {
 		const start = (currentPage - 1) * itemsPerPage;
-		return filteredUsers.slice(start, start + itemsPerPage);
-	}, [filteredUsers, currentPage]);
+		return filteredTeams.slice(start, start + itemsPerPage);
+	}, [filteredTeams, currentPage]);
 
-	const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
-
-	const handleRankToggle = (rank: string) => {
-		const newRanks = new Set(selectedRanks);
-		if (newRanks.has(rank)) {
-			newRanks.delete(rank);
-		} else {
-			newRanks.add(rank);
-		}
-		setSelectedRanks(newRanks);
-	};
-
-	const handleResetRanks = () => {
-		setSelectedRanks(new Set());
-	};
+	const totalPages = Math.ceil(filteredTeams.length / itemsPerPage);
 
 	const handleColumnToggle = (column: string) => {
 		const newColumns = new Set(visibleColumns);
@@ -119,18 +62,9 @@ export default function TeamsTable({
 		setVisibleColumns(newColumns);
 	};
 
-	const handleSort = (column: string) => {
-		if (sortColumn === column) {
-			setSortDirection(sortDirection === "asc" ? "desc" : "asc");
-		} else {
-			setSortColumn(column);
-			setSortDirection("asc");
-		}
-	};
-
 	return (
 		<>
-			{supervisorData.length === 0 ? (
+			{teamsData.length === 0 ? (
 				<Loading message="teams" />
 			) : (
 				<div className="space-y-4 mt-5">
@@ -149,37 +83,6 @@ export default function TeamsTable({
 									}}
 								/>
 							</div>
-							{/* Rank Filter Button */}
-							<DropdownMenu>
-								<DropdownMenuTrigger asChild>
-									<Button
-										variant="outline"
-										className="gap-2 bg-transparent">
-										<Plus className="h-4 w-4" />
-										<span>Rank</span>
-									</Button>
-								</DropdownMenuTrigger>
-								<DropdownMenuContent
-									align="start"
-									className="w-56">
-									<DropdownMenuLabel>Filter by Rank</DropdownMenuLabel>
-									<DropdownMenuSeparator />
-									<div className="p-2">
-										{allRanks.map((rank) => (
-											<div
-												key={rank}
-												onClick={() => handleRankToggle(rank)}
-												className="flex items-center gap-2 py-2 cursor-pointer hover:bg-muted rounded px-2">
-												<Checkbox checked={selectedRanks.has(rank)} />
-												<span className="flex-1 text-sm">{rank}</span>
-												<span className="text-xs text-muted-foreground">
-													{rankCounts[rank]}
-												</span>
-											</div>
-										))}
-									</div>
-								</DropdownMenuContent>
-							</DropdownMenu>
 
 							{/* View Toggle Button */}
 							<DropdownMenu>
@@ -197,24 +100,19 @@ export default function TeamsTable({
 									<DropdownMenuLabel>Toggle Columns</DropdownMenuLabel>
 									<DropdownMenuSeparator />
 									<DropdownMenuCheckboxItem
-										checked={visibleColumns.has("name")}
-										onCheckedChange={() => handleColumnToggle("name")}>
-										Name
+										checked={visibleColumns.has("title")}
+										onCheckedChange={() => handleColumnToggle("title")}>
+										Title
 									</DropdownMenuCheckboxItem>
 									<DropdownMenuCheckboxItem
-										checked={visibleColumns.has("email")}
-										onCheckedChange={() => handleColumnToggle("email")}>
-										Email
+										checked={visibleColumns.has("leader")}
+										onCheckedChange={() => handleColumnToggle("leader")}>
+										Team Leader
 									</DropdownMenuCheckboxItem>
 									<DropdownMenuCheckboxItem
-										checked={visibleColumns.has("role")}
-										onCheckedChange={() => handleColumnToggle("role")}>
-										Role
-									</DropdownMenuCheckboxItem>
-									<DropdownMenuCheckboxItem
-										checked={visibleColumns.has("rank")}
-										onCheckedChange={() => handleColumnToggle("rank")}>
-										Rank
+										checked={visibleColumns.has("members")}
+										onCheckedChange={() => handleColumnToggle("members")}>
+										Team Members
 									</DropdownMenuCheckboxItem>
 									<DropdownMenuCheckboxItem
 										checked={visibleColumns.has("status")}
@@ -222,9 +120,9 @@ export default function TeamsTable({
 										Status
 									</DropdownMenuCheckboxItem>
 									<DropdownMenuCheckboxItem
-										checked={visibleColumns.has("department")}
-										onCheckedChange={() => handleColumnToggle("department")}>
-										Department
+										checked={visibleColumns.has("started_at")}
+										onCheckedChange={() => handleColumnToggle("started_at")}>
+										Started At
 									</DropdownMenuCheckboxItem>
 								</DropdownMenuContent>
 							</DropdownMenu>
@@ -246,83 +144,34 @@ export default function TeamsTable({
 								</Button>
 							</div>
 						</div>
-
-						<div className="flex flex-wrap items-center gap-3 pt-2 border-t border-border">
-							{/* Combined selected filters and controls */}
-							<div className="flex flex-wrap items-center gap-2">
-								{/* Count badge for selected filters */}
-								{selectedRanks.size > 0 && (
-									<span className="text-sm text-muted-foreground ">
-										{selectedRanks.size} selected
-									</span>
-								)}
-
-								{/* Selected rank pills */}
-								{Array.from(selectedRanks).map((rank) => (
-									<button
-										key={rank}
-										onClick={() => handleRankToggle(rank)}
-										className="bg-primary-950 px-2 rounded-full text-white hover:underline text-[12px]">
-										{rank}
-									</button>
-								))}
-
-								{/* Reset and Close buttons */}
-								{selectedRanks.size > 0 && (
-									<>
-										<Button
-											variant="ghost"
-											size="sm"
-											onClick={() => {
-												handleResetRanks();
-											}}
-											className="h-auto py-0 px-0 text-sm text-muted-foreground hover:text-foreground">
-											Reset
-										</Button>
-										<Button
-											variant="ghost"
-											size="sm"
-											onClick={() => {
-												handleResetRanks();
-											}}
-											className="h-auto py-0 px-0 text-muted-foreground hover:text-foreground">
-											<X className="h-4 w-4" />
-										</Button>
-									</>
-								)}
-							</div>
-						</div>
 					</div>
+
+					<div className="pt-2 border-t border-border"></div>
 
 					{/* Table */}
 					<div className="rounded-lg border border-border">
 						<Table>
 							<TableHeader className="bg-muted">
 								<TableRow>
-									{visibleColumns.has("name") && <TableHead>Name</TableHead>}
-									{visibleColumns.has("email") && (
-										<TableHead
-											className="cursor-pointer select-none hover:bg-muted"
-											onClick={() => handleSort("email")}>
-											Email{" "}
-											{sortColumn === "email" &&
-												(sortDirection === "asc" ? "↑" : "↓")}
-										</TableHead>
+									{visibleColumns.has("title") && <TableHead>Title</TableHead>}
+									{visibleColumns.has("leader") && (
+										<TableHead>Team Leader</TableHead>
 									)}
-									{visibleColumns.has("role") && <TableHead>Role</TableHead>}
-									{visibleColumns.has("rank") && <TableHead>Rank</TableHead>}
+									{visibleColumns.has("members") && (
+										<TableHead>Team Members</TableHead>
+									)}
 									{visibleColumns.has("status") && (
 										<TableHead>Status</TableHead>
 									)}
-									{visibleColumns.has("department") && (
-										<TableHead>Department</TableHead>
+									{visibleColumns.has("started_at") && (
+										<TableHead>Started At</TableHead>
 									)}
 									<TableHead className="w-12">Action</TableHead>
 								</TableRow>
 							</TableHeader>
 							<TableBody>
-								{paginatedUsers.length === 0 ? (
-									<TableRow className="">
+								{paginatedTeams.length === 0 ? (
+									<TableRow>
 										<TableCell
 											colSpan={visibleColumns.size + 1}
 											className="text-center py-8">
@@ -330,7 +179,7 @@ export default function TeamsTable({
 												<Search className="h-12 w-12 text-muted-foreground opacity-50" />
 												<div>
 													<h3 className="font-semibold text-foreground">
-														No users found
+														No teams found
 													</h3>
 													<p className="text-sm text-muted-foreground">
 														Try adjusting your search or filters
@@ -340,42 +189,56 @@ export default function TeamsTable({
 										</TableCell>
 									</TableRow>
 								) : (
-									paginatedUsers.map((user) => (
+									paginatedTeams.map((team) => (
 										<TableRow
-											key={user.id}
+											key={team.id}
 											className="px-3">
-											{visibleColumns.has("name") && (
-												<TableCell>{user.name}</TableCell>
+											{visibleColumns.has("title") && (
+												<TableCell>{team?.title}</TableCell>
 											)}
-											{visibleColumns.has("email") && (
-												<TableCell className="text-muted-foreground">
-													{user.email}
-												</TableCell>
-											)}
-											{visibleColumns.has("role") && (
+											{visibleColumns.has("leader") && (
 												<TableCell>
 													<div className="flex items-center gap-2">
-														<Shield className="h-4 w-4 text-primary-700" />
-														<span className="text-sm">{user.role}</span>
+														<IconUserCheck className="h-5 w-5 text-primary-700" />
+														<span className="text-sm">{team.leader?.name}</span>
 													</div>
 												</TableCell>
 											)}
-											{visibleColumns.has("rank") && (
-												<TableCell>{user.rank}</TableCell>
+											{visibleColumns.has("members") && (
+												<TableCell>
+													<div className="flex flex-wrap gap-1">
+														{team.members.slice(0, 2).map((team) => (
+															<Badge
+																key={team.id}
+																variant="secondary">
+																{team.name}
+															</Badge>
+														))}
+														{team.members.length > 2 && (
+															<Badge variant="secondary">
+																+{team.members.length - 2}
+															</Badge>
+														)}
+													</div>
+												</TableCell>
 											)}
 											{visibleColumns.has("status") && (
 												<TableCell>
-													<span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200">
-														{user.status}
-													</span>
+													<Badge
+														className={cn(
+															STATUS_COLOR(team.status),
+															"px-3 font-mono rounded-md capitalize",
+														)}>
+														{team.status}
+													</Badge>
 												</TableCell>
 											)}
-											{visibleColumns.has("department") && (
-												<TableCell>{user.departmentName}</TableCell>
+											{visibleColumns.has("started_at") && (
+												<TableCell>{team.started_at}</TableCell>
 											)}
 											<TableCell className="border">
 												<Link
-													to={`/supervisors/detail/${user.id}`}
+													to={`/supervisors/detail/${team.id}`}
 													className="bg-primary-800 hover:cursor-pointer hover:bg-primary-800/80 flex items-center text-white px-2 py-1.5 rounded-md gap-x-1">
 													<Eye className="size-4" />
 													<span className="text-[12px]">View</span>

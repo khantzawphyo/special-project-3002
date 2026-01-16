@@ -36,7 +36,7 @@ export const routes = [
 				Component: CreateProposalPage,
 			},
 			{
-				path: "/project-proposals/submission",
+				path: "/project-proposals",
 				Component: ProjectsProposalPage,
 			},
 			{
@@ -52,7 +52,7 @@ export const routes = [
 				Component: BrowseProposalsPage,
 			},
 			{
-				path: "/project-proposals/detail/:slug",
+				path: "/project-proposals/:slug/detail",
 				Component: ProposalDetailPage,
 			},
 			{

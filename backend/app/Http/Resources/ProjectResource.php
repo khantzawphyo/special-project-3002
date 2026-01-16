@@ -12,8 +12,20 @@ class ProjectResource extends JsonResource
      *
      * @return array<string, mixed>
      */
+
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id'            => $this->id,
+            'name'         => $this->title,
+            'slug'         => $this->slug,
+            'description'  => $this->description,
+            'leader'     => $this->leader->name ?? 'N/A',
+            'supervisor' => $this->supervisor->name ?? 'N/A',
+            'members'   => MemberResource::collection($this->getRelation("members")),
+            'membersCount'   => $this->members_count ?? $this->members()->count(),
+            'status'        => $this->status,
+            'startedAt'  => $this->created_at->format('d-m-Y'),
+        ];
     }
 }

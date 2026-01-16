@@ -12,6 +12,7 @@ export default function ProjectsProposalPage() {
 	const [proposalsData, setProposalsData] = useState<ProjectProposal[]>([]);
 	const getProposalsData = async () => {
 		const res = await api.get("/proposals");
+		console.log(res.data);
 		setProposalsData(res.data);
 	};
 
@@ -22,16 +23,14 @@ export default function ProjectsProposalPage() {
 	if (!HasRole("IC") && !HasRole("Student Affairs")) return <UnAuthorized />;
 
 	return (
-		<div className="flex flex-col mx-auto max-w-7xl gap-3 px-4">
-			<div className="">
-				<h1 className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
-					Project Proposals
-				</h1>
-				<p className="text-sm text-neutral-500">
-					Browse and manage project proposals with team assignments and
-					supervisors.
-				</p>
-			</div>
+		<div className="mx-auto max-w-7xl">
+			<h1 className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
+				Project Proposals
+			</h1>
+			<p className="text-sm text-neutral-500">
+				Browse and manage project proposals with team assignments and
+				supervisors.
+			</p>
 			{proposalsData && (
 				<ProposalTable
 					getProposalsData={getProposalsData}

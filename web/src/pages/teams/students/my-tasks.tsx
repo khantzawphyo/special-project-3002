@@ -1,7 +1,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useHeaderInitializer } from "@/hooks/use-header-initializer";
+import TaskCard from "../components/task-card";
 
-import { TaskCard } from "../components/task-card";
 export default function MyTasksPage() {
 	useHeaderInitializer("MIIT | My Tasks", "My Tasks");
 

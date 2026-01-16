@@ -55,13 +55,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 			},
 			{
 				title: "Project Proposals",
-				url: "/project-proposals/submission",
+				url: "/project-proposals",
 				icon: IconFileDescription,
 			},
 			{
 				title: "Supervisors",
 				url: "/supervisors",
-				icon: Shield,
+				icon: ShieldCheckIcon,
 			},
 			{
 				title: "Projects",
