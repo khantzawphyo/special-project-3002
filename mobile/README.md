@@ -1,50 +1,86 @@
-# Welcome to your Expo app 👋
+# Mobile App Setup
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+This is the mobile application for the Special Project 3002, built with React Native, Expo, TypeScript, and NativeWind (Tailwind CSS for React Native).
 
-## Get started
+## Prerequisites
 
-1. Install dependencies
+- Node.js (version 18 or higher)
+- npm
+- For iOS development: macOS with Xcode
+- For Android development: Android Studio or Visual Studio Code with Android SDK
+- The backend API running (see backend README)
 
+## Installation
+
+1. Navigate to the mobile directory:
+
+   ```bash
+   cd mobile
+   ```
+
+2. Install dependencies:
    ```bash
    npm install
    ```
 
-2. Start the app
+## Development
+
+1. Start the Expo development server:
 
    ```bash
    npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+   or
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+   ```bash
+   npx expo start --offline
+   ```
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+2. This will open the Expo Developer Tools in your browser. You can then:
+   - Scan the QR code with the Expo Go app on your phone
+   - Press `a` for Android emulator
+   - Press `i` for iOS simulator (macOS only)
+   - Press `w` for web version
 
-## Get a fresh project
+## Platform-Specific Development
 
-When you're ready, run:
+### Android
 
 ```bash
-npm run reset-project
+npm run android
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### iOS (macOS only)
 
-## Learn more
+```bash
+npm run ios
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+### Web
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```bash
+npm run web
+```
 
-## Join the community
+## Technologies Used
 
-Join our community of developers creating universal apps.
+- React Native 0.81.5
+- Expo SDK 54
+- TypeScript
+- Expo Router for navigation
+- NativeWind for styling
+- Zustand for state management
+- React Hook Form for forms
+- Axios for API calls
+- Moti for animations
+- Zod for validation
+- And more...
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Environment Variables
+
+Create an `.env` file in the mobile directory for API URLs and other configuration. The app is configured to connect to the backend API.
+
+## API Integration
+
+The app uses Axios to communicate with the Laravel backend API. Ensure the backend is running on the configured URL.
