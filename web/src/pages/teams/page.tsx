@@ -11,7 +11,6 @@ export default function TeamsPage() {
 
 	const fetchTeams = async () => {
 		const res = await api.get("/teams");
-		console.log(res.data);
 		setTeams(res.data);
 	};
 

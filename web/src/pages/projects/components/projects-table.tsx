@@ -19,13 +19,17 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import { cn, STATUS_COLOR } from "@/lib/utils";
-import type { Project } from "@/types";
+import type { ProjectData } from "@/types";
 import { IconDownload, IconRefresh } from "@tabler/icons-react";
 import { Eye, Search, Settings2, ShieldCheckIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link } from "react-router";
 
-export default function ProjectsTable({ projects }: { projects: Project[] }) {
+export default function ProjectsTable({
+	projects,
+}: {
+	projects: ProjectData[];
+}) {
 	const [searchTerm, setSearchTerm] = useState("");
 	const [currentPage, setCurrentPage] = useState(1);
 	const [visibleColumns, setVisibleColumns] = useState<Set<string>>(
@@ -40,10 +44,10 @@ export default function ProjectsTable({ projects }: { projects: Project[] }) {
 	);
 	const itemsPerPage = 10;
 
-	const filteredUsers = useMemo(() => {
-		const filtered = projects.filter((user) => {
-			const matchesSearch = user.name
-				.toLowerCase()
+	const filteredProjects = useMemo(() => {
+		const filtered = projects.filter((project) => {
+			const matchesSearch = project.name
+				?.toLowerCase()
 				.includes(searchTerm.toLowerCase());
 			return matchesSearch;
 		});
@@ -53,10 +57,10 @@ export default function ProjectsTable({ projects }: { projects: Project[] }) {
 
 	const paginatedProjects = useMemo(() => {
 		const start = (currentPage - 1) * itemsPerPage;
-		return filteredUsers.slice(start, start + itemsPerPage);
-	}, [filteredUsers, currentPage]);
+		return filteredProjects.slice(start, start + itemsPerPage);
+	}, [filteredProjects, currentPage]);
 
-	const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+	const totalPages = Math.ceil(filteredProjects.length / itemsPerPage);
 
 	const handleColumnToggle = (column: string) => {
 		const newColumns = new Set(visibleColumns);
@@ -70,12 +74,12 @@ export default function ProjectsTable({ projects }: { projects: Project[] }) {
 
 	return (
 		<>
-			{projects.length === 0 ? (
+			{projects && projects.length === 0 ? (
 				<Loading message="projects" />
 			) : (
 				<div className="space-y-4 mt-5">
 					{/* Search and Filters */}
-					<div className="flex flex-col md:flex-row gap-4">
+					<div className="flex flex-col md:flex-row  gap-4">
 						<div className="flex gap-3">
 							<div className="relative flex-1 max-w-sm">
 								<Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -193,7 +197,7 @@ export default function ProjectsTable({ projects }: { projects: Project[] }) {
 												<Search className="h-12 w-12 text-muted-foreground opacity-50" />
 												<div>
 													<h3 className="font-semibold text-foreground">
-														No users found
+														No Projects found
 													</h3>
 													<p className="text-sm text-muted-foreground">
 														Try adjusting your search or filters
@@ -226,35 +230,31 @@ export default function ProjectsTable({ projects }: { projects: Project[] }) {
 												</TableCell>
 											)}
 											{visibleColumns.has("teamLeader") && (
-												<TableCell>
-													{project.teamLeader.name}
-												</TableCell>
+												<TableCell>{project.leader.name}</TableCell>
 											)}
 											{visibleColumns.has("members") && (
-												<TableCell className="text-muted-foreground">
-													<TableCell>
-														<div className="flex flex-wrap gap-1">
-															{project.members.slice(0, 2).map((member) => (
-																<Badge
-																	key={member.id}
-																	variant="secondary">
-																	{member.name}
-																</Badge>
-															))}
-															{project.members.length > 2 && (
-																<Badge variant="secondary">
-																	+{project.members.length - 2}
-																</Badge>
-															)}
-														</div>
-													</TableCell>
+												<TableCell>
+													<div className="flex flex-wrap gap-1 text-muted-foreground">
+														{project.members.slice(0, 2).map((member) => (
+															<Badge
+																key={member.id}
+																variant="secondary">
+																{member.name}
+															</Badge>
+														))}
+														{project.members.length > 2 && (
+															<Badge variant="secondary">
+																+{project.members.length - 2}
+															</Badge>
+														)}
+													</div>
 												</TableCell>
 											)}
 											{visibleColumns.has("status") && (
 												<TableCell>
 													<Badge
 														className={cn(
-															STATUS_COLOR(project.status),
+															STATUS_COLOR("active"),
 															"px-3 font-mono rounded-md capitalize",
 														)}>
 														{project.status}
@@ -262,12 +262,12 @@ export default function ProjectsTable({ projects }: { projects: Project[] }) {
 												</TableCell>
 											)}
 											{visibleColumns.has("approved_on") && (
-												<TableCell>{project.started_at}</TableCell>
+												<TableCell>{project.startedAt}</TableCell>
 											)}
 											<TableCell className="border">
 												<Link
-													to={`/projects/${project.slug}/detail`}
-													className="bg-primary-800 justify-center hover:cursor-pointer hover:bg-primary-800/80 flex items-center text-white py-2 rounded-md gap-x-1">
+													to={`/projects/${project?.slug}/detail`}
+													className="bg-primary-800 hover:cursor-pointer hover:bg-primary-800/80 flex items-center text-white px-2 py-1.5 rounded-md gap-x-1">
 													<Eye className="size-4" />
 													<span className="text-[12px]">View</span>
 												</Link>

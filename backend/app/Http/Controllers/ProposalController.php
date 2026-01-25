@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ProposalApproved;
 use App\Http\Requests\ProposalRequest;
 use App\Http\Resources\ProposalResource;
-use App\Models\Project;
 use App\Models\Proposal;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 class ProposalController extends Controller
 {
@@ -49,7 +48,7 @@ class ProposalController extends Controller
 
         if ($proposals->isEmpty()) {
             return response()->json([
-                'message' => 'Proposal not found'
+                'message' => 'Proposals not found'
             ], 404);
         }
 
@@ -58,22 +57,14 @@ class ProposalController extends Controller
 
     public function approveByIC(Proposal $proposal)
     {
+        if ($proposal->status === 'approved') {
+            return response()->json(['message' => 'This proposal is already a project.'], 422);
+        }
+
         return DB::transaction(function () use ($proposal) {
             $proposal->update(['status' => 'approved']);
 
-            $project = Project::create([
-                'name'          => $proposal->title,
-                'slug'          => Str::slug($proposal->title),
-                'description'   => $proposal->description,
-                'leader_id'     => $proposal->student_id,
-                'supervisor_id' => $proposal->supervisor_id,
-                'proposal_id'   => $proposal->id,
-                'start_date' => now(),
-            ]);
-
-            // // Sync Team Members from Proposal Pivot to Project Pivot
-            $memberIds = $proposal->members()->pluck('user_id');
-            $project->members()->attach($memberIds);
+            event(new ProposalApproved($proposal));
 
             return response()->json(['message' => 'Proposal transformed to Project successfully!']);
         });
@@ -111,6 +102,13 @@ class ProposalController extends Controller
     {
         try {
             $proposals = Proposal::where('supervisor_id', 11)->with(['supervisor', 'leader', 'members'])->get();
+
+            if ($proposals->isEmpty()) {
+                return response()->json([
+                    'message' => 'Proposals not found'
+                ], 404);
+            }
+
             return ProposalResource::collection($proposals);
         } catch (\Exception $e) {
             return response()->json([

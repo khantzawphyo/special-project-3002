@@ -48,6 +48,28 @@ export interface ProjectProposal {
 	submitted_at: string;
 }
 
+export interface SupervisorData {
+	id: number;
+	name: string;
+	email: string;
+	status: string;
+	role: string;
+	rank: { id: number; name: string; description: string };
+	department: { id: number; name: string };
+}
+
+export interface ProjectData {
+	id: number;
+	name: string;
+	slug: string;
+	description: string;
+	supervisor: User;
+	leader: User;
+	members: User[];
+	status: "active" | "completed" | "under review";
+	startedAt: string;
+}
+
 type ProjectStatus = "active" | "competed" | "under review";
 
 export interface Project {

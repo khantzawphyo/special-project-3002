@@ -26,7 +26,8 @@ import type { ProjectProposal } from "@/types";
 import { PencilSquareIcon } from "@heroicons/react/24/solid";
 import { IconUsersGroup } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
-import { toast } from "sonner";
+import toast, { Toaster } from "react-hot-toast";
+
 import ApprovalModal from "./components/approval-modal";
 import CommentBox from "./components/comment-box";
 
@@ -84,11 +85,11 @@ export default function ProposalDetail() {
 	};
 
 	const handleReject = async () => {
-		toast.success("Successfully created!");
-		// const res = await api.post(`/proposals/${proposal?.id}/reject`);
-		// if (res.status === 200) {
-		// 	fetchProposalDetail();
-		// }
+		const res = await api.post(`/proposals/${proposal?.slug}/reject`);
+		if (res.status === 200) {
+			toast.success("Proposal Rejected!");
+			fetchProposalDetail();
+		}
 	};
 
 	if (loading)
@@ -103,6 +104,7 @@ export default function ProposalDetail() {
 
 	return (
 		<>
+			<Toaster />
 			<ApprovalModal
 				isOpen={showApprovalModal}
 				isLoading={isApproving}

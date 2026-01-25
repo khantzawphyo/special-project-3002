@@ -17,15 +17,14 @@ class ProjectResource extends JsonResource
     {
         return [
             'id'            => $this->id,
-            'name'         => $this->title,
+            'name'         => $this->name,
             'slug'         => $this->slug,
             'description'  => $this->description,
-            'leader'     => $this->leader->name ?? 'N/A',
-            'supervisor' => $this->supervisor->name ?? 'N/A',
-            'members'   => MemberResource::collection($this->getRelation("members")),
-            'membersCount'   => $this->members_count ?? $this->members()->count(),
-            'status'        => $this->status,
-            'startedAt'  => $this->created_at->format('d-m-Y'),
+            'leader'     => new MemberResource($this->leader),
+            'supervisor' => new MemberResource($this->supervisor),
+            'members' => MemberResource::collection($this->whenLoaded('members')),
+            'status' => $this->status,
+            'startedAt'  => $this->start_date->format('d-m-Y'),
         ];
     }
 }

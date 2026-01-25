@@ -29,4 +29,8 @@ class Project extends Model
     {
         return $this->belongsTo(Proposal::class, 'proposal_id');
     }
+
+    protected $casts = [
+        'start_date' => 'datetime',
+    ];
 }
