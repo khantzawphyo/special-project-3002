@@ -1,46 +1,25 @@
+import api from "@/api/api";
 import { useHeaderInitializer } from "@/hooks/use-header-initializer";
 import { HasRole } from "@/lib/utils";
-import type { UsersData } from "@/types";
-import { useState } from "react";
+import type { SupervisorData } from "@/types";
+import { useEffect, useState } from "react";
 import UnAuthorized from "../UnAuthorized";
 import SupervisorsTable from "./components/supervisors-table";
 
-const demoSupervisorData: UsersData[] = [
-	{
-		id: 9,
-		name: "Dr. James Taylor",
-		email: "james.taylor@miit.edu.mm",
-		role: "Supervisor",
-		status: "Active",
-		rank: "Associate Professor",
-		departmentName: "Software Engineering",
-		phoneNumber: "+95 9 901 234 567",
-	},
-	{
-		id: 10,
-		name: "Dr. Maria Garcia",
-		email: "maria.garcia@miit.edu.mm",
-		role: "Supervisor",
-		status: "Active",
-		rank: "Tutor",
-		departmentName: "Computer Science",
-		phoneNumber: "+95 9 012 345 678",
-	},
-	{
-		id: 12,
-		name: "Dr. Patricia White",
-		email: "patricia.white@miit.edu.mm",
-		role: "Supervisor",
-		status: "Active",
-		rank: "Lecturer",
-		departmentName: "Software Engineering",
-		phoneNumber: "+95 9 234 567 890",
-	},
-];
-
 export default function SupervisorsPage() {
 	useHeaderInitializer("MIIT| Supervisors", "Project Supervisors");
-	const [supervisorData] = useState<UsersData[]>(demoSupervisorData);
+	const [supervisorData, setSupervisorData] = useState<SupervisorData[] | null>(
+		[],
+	);
+
+	const fetchSupervisors = async () => {
+		const res = await api.get("/supervisors");
+		setSupervisorData(res.data);
+	};
+
+	useEffect(() => {
+		fetchSupervisors();
+	}, []);
 
 	if (HasRole("Student")) return <UnAuthorized />;
 

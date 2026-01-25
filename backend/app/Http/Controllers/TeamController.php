@@ -8,6 +8,7 @@ class TeamController extends Controller
     {
         return [
             [
+                "id" => "1",
                 "title" => "A Peer-to-Peer Micro-Lending & Savings Platform",
                 "leader" => [
                     "id" => "1",
@@ -23,6 +24,7 @@ class TeamController extends Controller
                 "started_at" => "2023-01-15"
             ],
             [
+                "id" => "2",
                 "title" => "IoT-Based Soil Nutrient Monitoring & Crop Recommendation System",
                 "leader" => [
                     "id" => "4",

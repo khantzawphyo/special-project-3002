@@ -28,9 +28,7 @@ export default function AdminDashboard() {
 	return (
 		<div className="max-w-7xl mx-auto">
 			<div className="space-y-4 mb-8">
-				{dashboardData && (
-					<AdminCards noOfProposals={dashboardData?.noOfProposals} />
-				)}
+				{dashboardData && <AdminCards dashboardData={dashboardData} />}
 			</div>
 
 			<Card className="shadow-2xs px-6">
@@ -51,7 +49,7 @@ export default function AdminDashboard() {
 						<span>Export</span>
 					</Button>
 				</div>
-				{false ? (
+				{true ? (
 					<h2 className="text-center text-3xl my-5 font-bold">Coming Soon!</h2>
 				) : (
 					<ProjectsChart />

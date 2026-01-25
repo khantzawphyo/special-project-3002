@@ -19,16 +19,16 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import { cn, STATUS_COLOR } from "@/lib/utils";
-import type { UsersData } from "@/types";
+import type { SupervisorData } from "@/types";
 import { IconDownload, IconRefresh } from "@tabler/icons-react";
-import { Eye, Search, Settings2, Shield } from "lucide-react";
+import { Eye, Search, Settings2, ShieldCheckIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link } from "react-router";
 
 export default function SupervisorsTable({
 	supervisorData,
 }: {
-	supervisorData: UsersData[];
+	supervisorData: SupervisorData[];
 }) {
 	const [searchTerm, setSearchTerm] = useState("");
 	const [currentPage, setCurrentPage] = useState(1);
@@ -49,8 +49,8 @@ export default function SupervisorsTable({
 
 		if (sortColumn) {
 			filtered.sort((a, b) => {
-				let aVal: any = a[sortColumn as keyof UsersData];
-				let bVal: any = b[sortColumn as keyof UsersData];
+				let aVal: any = a[sortColumn as keyof SupervisorData];
+				let bVal: any = b[sortColumn as keyof SupervisorData];
 
 				if (typeof aVal === "string") {
 					aVal = aVal.toLowerCase();
@@ -239,13 +239,13 @@ export default function SupervisorsTable({
 											{visibleColumns.has("role") && (
 												<TableCell>
 													<div className="flex items-center gap-2">
-														<Shield className="h-4 w-4 text-primary-700" />
+														<ShieldCheckIcon className="h-4 w-4 text-primary-700" />
 														<span className="text-sm">{supervisor.role}</span>
 													</div>
 												</TableCell>
 											)}
 											{visibleColumns.has("rank") && (
-												<TableCell>{supervisor.rank}</TableCell>
+												<TableCell>{supervisor.rank.name}</TableCell>
 											)}
 											{visibleColumns.has("status") && (
 												<TableCell>
@@ -259,7 +259,7 @@ export default function SupervisorsTable({
 												</TableCell>
 											)}
 											{visibleColumns.has("department") && (
-												<TableCell>{supervisor.departmentName}</TableCell>
+												<TableCell>{supervisor.department.name}</TableCell>
 											)}
 											<TableCell className="border">
 												<Link

@@ -18,12 +18,16 @@ import {
 	UserIcon,
 } from "@heroicons/react/24/outline";
 
-import { Download, Loader2, ShieldCheck } from "lucide-react";
+import { Download, Loader2, ShieldCheck, TrashIcon } from "lucide-react";
 
 import api from "@/api/api";
+import { useAuthUserStore } from "@/stores/useAuthUserStore";
 import type { ProjectProposal } from "@/types";
+import { PencilSquareIcon } from "@heroicons/react/24/solid";
 import { IconUsersGroup } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
+
 import ApprovalModal from "./components/approval-modal";
 import CommentBox from "./components/comment-box";
 
@@ -31,6 +35,8 @@ export default function ProposalDetail() {
 	const navigate = useNavigate();
 	const { slug } = useParams();
 	const isIC = HasRole("IC");
+	const isStudent = HasRole("Student");
+	const authUser = useAuthUserStore((state) => state.authUser);
 	const [proposal, setProposal] = useState<ProjectProposal | null>();
 	const [loading, setLoading] = useState(true);
 	const [showApprovalModal, setShowApprovalModal] = useState(false);
@@ -61,7 +67,7 @@ export default function ProposalDetail() {
 		setShowApprovalModal(true);
 		setIsApproving(true);
 		try {
-			const res = await api.post(`/proposals/${proposal?.id}/approve`);
+			const res = await api.post(`/proposals/${proposal?.slug}/approve`);
 			if (res.status === 200) {
 				setIsApproving(false);
 				// Modal will auto-close after showing checkmark
@@ -79,8 +85,9 @@ export default function ProposalDetail() {
 	};
 
 	const handleReject = async () => {
-		const res = await api.post(`/proposals/${proposal?.id}/reject`);
+		const res = await api.post(`/proposals/${proposal?.slug}/reject`);
 		if (res.status === 200) {
+			toast.success("Proposal Rejected!");
 			fetchProposalDetail();
 		}
 	};
@@ -97,6 +104,7 @@ export default function ProposalDetail() {
 
 	return (
 		<>
+			<Toaster />
 			<ApprovalModal
 				isOpen={showApprovalModal}
 				isLoading={isApproving}
@@ -121,7 +129,7 @@ export default function ProposalDetail() {
 				) : (
 					<>
 						<Card className="mb-6 border-gray-200 shadow-sm">
-							<CardContent className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+							<CardContent className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
 								<div>
 									<h1 className="text-2xl font-bold ">{proposal.title}</h1>
 									<div className="mt-2 flex flex-wrap items-center gap-3 text-sm">
@@ -138,6 +146,24 @@ export default function ProposalDetail() {
 										</span>
 									</div>
 								</div>
+								{proposal.status === "pending" &&
+									isStudent &&
+									authUser.id === proposal?.submittedBy.id && (
+										<div className="space-x-3">
+											<Button
+												size={"sm"}
+												className="bg-yellow-300 font-semibold text-yellow-900 hover:bg-yellow-500 hover:text-white">
+												<PencilSquareIcon />
+												<span>Edit</span>
+											</Button>
+											<Button
+												size={"sm"}
+												className="bg-red-300 font-semibold text-red-900 hover:bg-red-500 hover:text-white">
+												<TrashIcon />
+												<span>Delete</span>
+											</Button>
+										</div>
+									)}
 							</CardContent>
 						</Card>
 
@@ -182,7 +208,7 @@ export default function ProposalDetail() {
 												asChild
 												className="gap-2 bg-primary-600 font-semibold text-white hover:bg-primary-500">
 												<a
-													href={proposal.file}
+													href={proposal.fileUrl}
 													target="_blank"
 													rel="noopener noreferrer"
 													download>

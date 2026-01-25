@@ -6,6 +6,7 @@ use App\Http\Controllers\dashboard\DashboardController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProposalController;
+use App\Http\Controllers\SupervisorController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\UserController;
 use App\Http\Resources\ProposalResource;
@@ -36,9 +37,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get("/proposals/my-proposals", 'myProposals');
         Route::get("/proposals/browse-proposals", 'browseProposals');
         Route::get("/proposals/{proposal:slug}/detail", 'detail');
-        Route::delete("/proposals/{proposal}/delete", 'destroy');
-        Route::post("/proposals/{proposal}/approve", 'approveByIC');
-        Route::post("/proposals/{proposal}/reject", 'rejectByIC');
+        Route::delete("/proposals/{proposal:slug}/delete", 'destroy');
+        Route::post("/proposals/{proposal:slug}/approve", 'approveByIC');
+        Route::post("/proposals/{proposal:slug}/reject", 'rejectByIC');
     });
 
     Route::controller(CommentController::class)->group(function () {
@@ -47,9 +48,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete("/comments/{comment}", 'destroy');
     });
 
+    Route::controller(SupervisorController::class)->group(function () {
+        Route::get("/supervisors", 'index');
+        Route::get("/supervisors/{supervisor:id}/detail", 'show');
+    });
+
     Route::controller(ProjectController::class)->group(function () {
         Route::get("/projects", 'index');
-        Route::get("/projects/project:slug", 'show');
+        Route::get("/projects/{project:slug}/detail", 'show');
     });
 
     Route::controller(TeamController::class)->group(function () {
@@ -60,9 +66,4 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post("/upload-to-s3", 'uploadToS3');
         Route::post("/delete-from-s3", 'deleteFromS3');
     });
-});
-
-Route::get("/test", function () {
-    $proposals = Auth::user()->teamProposals()->with(['supervisor', 'leader', 'members'])->get();
-    return $proposals;
 });

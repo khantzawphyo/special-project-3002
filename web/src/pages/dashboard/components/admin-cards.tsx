@@ -25,12 +25,12 @@ type SectionCardProps = {
 	pageUrl: string;
 };
 
-export function AdminCards({ noOfProposals }: { noOfProposals: number }) {
+export function AdminCards({ dashboardData }: any) {
 	const navigate = useNavigate();
 
 	const sectionCardData = [
 		{
-			title: "30",
+			title: dashboardData.noOfProjects ?? 0,
 			cardIcon: IconListDetails,
 			description: "Total Projects",
 			footerTop: "Project activity increasing this month",
@@ -38,15 +38,15 @@ export function AdminCards({ noOfProposals }: { noOfProposals: number }) {
 			pageUrl: "/projects",
 		},
 		{
-			title: noOfProposals ?? 0,
+			title: dashboardData.noOfProposals ?? 0,
 			cardIcon: IconFileDescription,
 			description: "Total Proposals",
 			footerTop: "Project activity increasing this month",
 			footerBottom: "Overall workload remains stable",
-			pageUrl: "/project-proposals/submission",
+			pageUrl: "/project-proposals",
 		},
 		{
-			title: "20",
+			title: dashboardData.noOfSupervisors ?? 0,
 			cardIcon: ShieldCheckIcon,
 			description: "Total Supervisors",
 			footerTop: "Project activity increasing this month",
@@ -54,7 +54,7 @@ export function AdminCards({ noOfProposals }: { noOfProposals: number }) {
 			pageUrl: "/supervisors",
 		},
 		{
-			title: "34",
+			title: dashboardData.noOfTeams ?? 0,
 			cardIcon: IconUsersGroup,
 			description: "Total Teams",
 			footerTop: "Project activity increasing this month",

@@ -17,7 +17,7 @@ class RolePermissionSeeder extends Seeder
     {
         app()->make(PermissionRegistrar::class)->forgetCachedPermissions();
 
-        $roles = ['IC', 'Student Affairs', 'Supervisor', 'Faculty', 'Student'];
+        $roles = ['IC', 'Student Affairs', 'Supervisor', 'Faculty', 'Student', 'Project Leader'];
 
         foreach ($roles as $role) {
             Role::create(['name' => $role]);

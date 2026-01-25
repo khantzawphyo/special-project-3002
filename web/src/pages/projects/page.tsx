@@ -1,17 +1,16 @@
 import api from "@/api/api";
 import { useHeaderInitializer } from "@/hooks/use-header-initializer";
-import type { Project } from "@/types";
+import type { ProjectData } from "@/types";
 import { useEffect, useState } from "react";
 import ProjectsTable from "./components/projects-table";
 
 export default function ProjectsPage() {
 	useHeaderInitializer("MIIT| Proposals", "Project Proposals");
 
-	const [projects, setProjects] = useState<Project[]>([]);
+	const [projects, setProjects] = useState<ProjectData[]>([]);
 
 	const getProjects = async () => {
 		const res = await api.get("/projects");
-		// console.log(res.data);
 		setProjects(res.data);
 	};
 
