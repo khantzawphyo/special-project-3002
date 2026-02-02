@@ -1,6 +1,7 @@
 import {
 	IconAdjustmentsAlt,
 	IconDotsVertical,
+	IconLockSquareRounded,
 	IconLogout,
 	IconNotification,
 	IconUserCircle,
@@ -72,7 +73,7 @@ export function NavUser({
 								/>
 								<AvatarFallback className="rounded-lg">MT</AvatarFallback>
 							</Avatar>
-							<div className="grid flex-1 hidden text-left text-sm leading-tight">
+							<div className="grid flex-1 text-left text-sm leading-tight">
 								<span className="truncate font-medium">{user.name}</span>
 								<span className="text-muted-foreground truncate text-xs">
 									{user.email}
@@ -105,9 +106,13 @@ export function NavUser({
 						</DropdownMenuLabel>
 						<DropdownMenuSeparator />
 						<DropdownMenuGroup>
-							<DropdownMenuItem>
+							<DropdownMenuItem className="hover:cursor-pointer">
 								<IconUserCircle />
-								Account
+								Profile
+							</DropdownMenuItem>
+							<DropdownMenuItem className="hover:cursor-pointer">
+								<IconLockSquareRounded />
+								Security
 							</DropdownMenuItem>
 							<DropdownMenuItem
 								onClick={() => navigate("/settings")}

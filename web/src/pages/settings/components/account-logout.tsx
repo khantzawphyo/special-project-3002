@@ -1,0 +1,46 @@
+import api from "@/api/api";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { useAuthStore } from "@/stores/useAuthStore";
+import { useAuthUserStore } from "@/stores/useAuthUserStore";
+import { IconLogout } from "@tabler/icons-react";
+import { useNavigate } from "react-router";
+
+export default function AccountLogout() {
+	const navigate = useNavigate();
+	const setAuthToken = useAuthStore((state) => state.setAuthToken);
+	const setAuthUser = useAuthUserStore((state) => state.setAuthUser);
+
+	const handleLogout = async () => {
+		try {
+			await api.post("/logout");
+		} catch (error) {
+			console.error(
+				"Logout request failed, but clearing local session:",
+				error,
+			);
+		} finally {
+			setAuthToken("");
+			setAuthUser("");
+			delete api.defaults.headers.common["Authorization"];
+			navigate("/login", { replace: true });
+		}
+	};
+
+	return (
+		<Card>
+			<div className="px-5 flex items-start justify-between">
+				<div>
+					<h3 className="font-semibold">Account</h3>
+					<p className="text-sm">Sign out of your MIIT account</p>
+				</div>
+				<Button
+					onClick={handleLogout}
+					className="flex hover:cursor-pointer items-center gap-2 px-4 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-md transition-colors">
+					<IconLogout size={18} />
+					<span className="font-medium">Logout</span>
+				</Button>
+			</div>
+		</Card>
+	);
+}

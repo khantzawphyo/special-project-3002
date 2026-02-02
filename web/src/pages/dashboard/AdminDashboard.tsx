@@ -10,11 +10,12 @@ import ProjectsChart from "./components/projects-chart";
 export default function AdminDashboard() {
 	useHeaderInitializer("MIIT | IC Dashboard", "Dashboard");
 
-	const [dashboardData, setDashboardData] = useState<{ noOfProposals: number }>(
-		{
-			noOfProposals: 0,
-		},
-	);
+	const [dashboardData, setDashboardData] = useState<{
+		noOfProposals: number;
+		noOfProjects: number;
+		noOfSupervisors: number;
+		noOfFaculties: number;
+	}>();
 
 	const fetchDashboardData = async () => {
 		const res = await api.get("/dashboard");
@@ -49,7 +50,7 @@ export default function AdminDashboard() {
 						<span>Export</span>
 					</Button>
 				</div>
-				{true ? (
+				{false ? (
 					<h2 className="text-center text-3xl my-5 font-bold">Coming Soon!</h2>
 				) : (
 					<ProjectsChart />

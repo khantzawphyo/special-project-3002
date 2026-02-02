@@ -1,7 +1,7 @@
 import { useHeaderInitializer } from "@/hooks/use-header-initializer";
-import { TeamCard } from "../../projects/students/components/project-card";
+import { ProjectCard } from "@/pages/projects/students/components/project-card";
 
-export default function MyTeams() {
+export default function MyProjects() {
 	useHeaderInitializer("MIIT | My Teams", "My Teams");
 
 	const mockTeams = [
@@ -51,7 +51,7 @@ export default function MyTeams() {
 		<div className="mx-auto max-w-7xl">
 			<div className="">
 				<h1 className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
-					Team Workspace
+					Projects Workspace
 				</h1>
 				<p className="text-sm text-neutral-500">
 					Oversee your active collaborations, track project status, and
@@ -60,7 +60,7 @@ export default function MyTeams() {
 			</div>
 			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-5">
 				{mockTeams.map((team) => (
-					<TeamCard
+					<ProjectCard
 						key={team.id}
 						team={team}
 					/>

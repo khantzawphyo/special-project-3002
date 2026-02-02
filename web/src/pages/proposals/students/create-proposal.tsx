@@ -14,10 +14,10 @@ import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import * as z from "zod";
-import UnAuthorized from "../../UnAuthorized";
-import FileUpload from "../components/file-upload";
-import MembersSelection from "../components/members-selection";
-import SupervisorSelection from "../components/supervisor-selection";
+import UnAuthorized from "../../auth/un-authorized";
+import FileUpload from "./components/file-upload";
+import MembersSelection from "./components/members-selection";
+import SupervisorSelection from "./components/supervisor-selection";
 
 const ProposalSchema = z.object({
 	title: z

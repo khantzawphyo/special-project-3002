@@ -10,6 +10,7 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 
+import GuestLayout from "@/layouts/GuestLayout";
 import { CheckCircle, XCircle } from "lucide-react";
 
 const MatrixWrapper = ({ children }: any) => {
@@ -42,64 +43,62 @@ export default function PermissionMatrix() {
 	};
 
 	return (
-		<div className="h-full m-3 md:mx-10 lg:mx-20">
-			<MatrixWrapper>
-				<div className="text-center py-8 bg-linear-to-r from-purple-500 to-blue-600 text-white space-y-3">
-					<h1 className="text-2xl md:text-3xl font-semibold">
-						Permissions Matrix
-					</h1>
-					<p className="text-base md:text-lg">
-						Special Projects Management System - Role-Based Access Control
-					</p>
-				</div>
-
-				<div className="px-5 space-y-5">
-					{modules.map(([moduleName, modulePermissions]) => (
-						<div
-							key={moduleName}
-							className="space-y-3">
-							<h2 className="text-base md:text-xl font-semibold capitalize">
-								{moduleName.replace(/_/g, " ")}
-							</h2>
-
-							<Table className="rounded-md overflow-hidden">
-								<TableHeader className="bg-linear-to-r from-purple-500 to-blue-600">
-									<TableRow>
-										<TableHead className="text-white font-semibold text-sm md:text-base">
-											Permission
-										</TableHead>
-										{roles.map((role) => (
-											<TableHead
-												key={role}
-												className="text-white font-semibold text-sm md:text-base">
-												{role}
+		<GuestLayout>
+			<div className="h-full p-3 md:px-5 lg:px-10">
+				<MatrixWrapper>
+					<div className="text-center py-8 bg-linear-to-r from-purple-500 to-blue-600 text-white space-y-3">
+						<h1 className="text-2xl md:text-3xl font-semibold">
+							Permissions Matrix
+						</h1>
+						<p className="text-base md:text-lg">
+							Special Projects Management System - Role-Based Access Control
+						</p>
+					</div>
+					<div className="px-5 space-y-5">
+						{modules.map(([moduleName, modulePermissions]) => (
+							<div
+								key={moduleName}
+								className="space-y-3">
+								<h2 className="text-base md:text-xl font-semibold capitalize">
+									{moduleName.replace(/_/g, " ")}
+								</h2>
+								<Table className="rounded-md overflow-hidden">
+									<TableHeader className="bg-linear-to-r from-purple-500 to-blue-600">
+										<TableRow>
+											<TableHead className="text-white font-semibold text-sm md:text-base">
+												Permission
 											</TableHead>
-										))}
-									</TableRow>
-								</TableHeader>
-
-								<TableBody>
-									{Object.entries(modulePermissions).map(
-										([permissionName, roleValues]: any) => (
-											<TableRow key={permissionName}>
-												<TableCell className="font-medium capitalize">
-													{permissionName.replace(/-/g, " ")}
-												</TableCell>
-
-												{roles.map((role) => (
-													<TableCell key={role}>
-														{renderPermissionValue(roleValues[role])}
+											{roles.map((role) => (
+												<TableHead
+													key={role}
+													className="text-white font-semibold text-sm md:text-base">
+													{role}
+												</TableHead>
+											))}
+										</TableRow>
+									</TableHeader>
+									<TableBody>
+										{Object.entries(modulePermissions).map(
+											([permissionName, roleValues]: any) => (
+												<TableRow key={permissionName}>
+													<TableCell className="font-medium capitalize">
+														{permissionName.replace(/-/g, " ")}
 													</TableCell>
-												))}
-											</TableRow>
-										),
-									)}
-								</TableBody>
-							</Table>
-						</div>
-					))}
-				</div>
-			</MatrixWrapper>
-		</div>
+													{roles.map((role) => (
+														<TableCell key={role}>
+															{renderPermissionValue(roleValues[role])}
+														</TableCell>
+													))}
+												</TableRow>
+											),
+										)}
+									</TableBody>
+								</Table>
+							</div>
+						))}
+					</div>
+				</MatrixWrapper>
+			</div>
+		</GuestLayout>
 	);
 }

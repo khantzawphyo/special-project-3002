@@ -12,7 +12,6 @@ export default function RootLayout({ children }: any) {
 
 	const handleOpenChange = (isOpen: boolean) => {
 		setOpen(isOpen);
-		// Save the sidebar_state to a cookie whenever it changes
 		Cookies.set("sidebar_state", String(isOpen), { expires: 365 });
 	};
 

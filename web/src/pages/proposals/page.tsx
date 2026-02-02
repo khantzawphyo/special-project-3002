@@ -3,7 +3,7 @@ import { useHeaderInitializer } from "@/hooks/use-header-initializer";
 import { HasRole } from "@/lib/utils";
 import type { ProjectProposal } from "@/types";
 import { useEffect, useState } from "react";
-import UnAuthorized from "../UnAuthorized";
+import UnAuthorized from "../auth/un-authorized";
 import ProposalTable from "./proposals-table";
 
 export default function ProjectsProposalPage() {

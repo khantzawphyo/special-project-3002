@@ -1,6 +1,6 @@
 import { useHeaderInitializer } from "@/hooks/use-header-initializer";
 import { HasRole } from "@/lib/utils";
-import UnAuthorized from "../UnAuthorized";
+import UnAuthorized from "../auth/un-authorized";
 
 export default function SupervisorDashboard() {
 	useHeaderInitializer("MIIT | Supervisor Dashboard", "Dashboard");

@@ -38,7 +38,7 @@ const STATUS_COLORS: Record<string, string> = {
 	rejected: "bg-red-100 text-red-800 border-red-200",
 };
 
-export function TeamCard({ team }: TeamCardProps) {
+export function ProjectCard({ team }: TeamCardProps) {
 	const getInitials = (name: string) => {
 		return name
 			.split(" ")
@@ -50,7 +50,7 @@ export function TeamCard({ team }: TeamCardProps) {
 	if (!team) return null;
 
 	return (
-		<Link to={`/teams/detail/${team.id}`}>
+		<Link to={`/projects/my-projects/${team.sl}/detail`}>
 			<Card className="border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200">
 				{/* Project Title and Status */}
 				<CardContent>

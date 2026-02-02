@@ -121,12 +121,12 @@ export default function ProjectsTable({
 									<DropdownMenuCheckboxItem
 										checked={visibleColumns.has("teamLeader")}
 										onCheckedChange={() => handleColumnToggle("teamLeader")}>
-										Team Leader
+										Project Leader
 									</DropdownMenuCheckboxItem>
 									<DropdownMenuCheckboxItem
 										checked={visibleColumns.has("members")}
 										onCheckedChange={() => handleColumnToggle("members")}>
-										Team Members
+										Project Members
 									</DropdownMenuCheckboxItem>
 									<DropdownMenuCheckboxItem
 										checked={visibleColumns.has("status")}
@@ -173,10 +173,10 @@ export default function ProjectsTable({
 										<TableHead>Supervisor </TableHead>
 									)}
 									{visibleColumns.has("teamLeader") && (
-										<TableHead>Team Leader</TableHead>
+										<TableHead>Project Leader</TableHead>
 									)}
 									{visibleColumns.has("members") && (
-										<TableHead>Team Members</TableHead>
+										<TableHead>Project Members</TableHead>
 									)}
 									{visibleColumns.has("status") && (
 										<TableHead>Status</TableHead>
@@ -212,7 +212,7 @@ export default function ProjectsTable({
 											key={project.id}
 											className="px-3">
 											{visibleColumns.has("name") && (
-												<TableCell>
+												<TableCell className="font-semibold">
 													{project.name.length > 50
 														? project.name.substring(0, 50) + "..."
 														: project.name}
@@ -222,7 +222,7 @@ export default function ProjectsTable({
 											{visibleColumns.has("supervisor") && (
 												<TableCell>
 													<div className="flex items-center gap-2">
-														<ShieldCheckIcon className="h-4 w-4 text-primary-700" />
+														<ShieldCheckIcon className="h-5 w-5 text-primary-700" />
 														<span className="text-sm">
 															{project.supervisor.name}
 														</span>
@@ -267,7 +267,7 @@ export default function ProjectsTable({
 											<TableCell className="border">
 												<Link
 													to={`/projects/${project?.slug}/detail`}
-													className="bg-primary-800 hover:cursor-pointer hover:bg-primary-800/80 flex items-center text-white px-2 py-1.5 rounded-md gap-x-1">
+													className="bg-primary-800 hover:cursor-pointer hover:bg-primary-800/80 flex items-center text-white px-2 py-2 rounded-md gap-x-1 justify-center">
 													<Eye className="size-4" />
 													<span className="text-[12px]">View</span>
 												</Link>
@@ -280,43 +280,51 @@ export default function ProjectsTable({
 					</div>
 
 					{/* Pagination */}
-					<div className="flex items-center justify-between">
-						<div className="text-sm text-muted-foreground">
-							Page {currentPage} of {totalPages}
-						</div>
-						<div className="flex gap-2">
-							<Button
-								variant="outline"
-								size="sm"
-								onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-								disabled={currentPage === 1}>
-								Previous
-							</Button>
-							<div className="flex gap-1">
-								{Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-									const pageNum = i + 1;
-									return (
-										<Button
-											key={pageNum}
-											variant={currentPage === pageNum ? "default" : "outline"}
-											size="sm"
-											onClick={() => setCurrentPage(pageNum)}>
-											{pageNum}
-										</Button>
-									);
-								})}
+					{totalPages > 1 && (
+						<div className="flex items-center justify-between">
+							<div className="text-sm text-muted-foreground">
+								Page {currentPage} of {totalPages}
 							</div>
-							<Button
-								variant="outline"
-								size="sm"
-								onClick={() =>
-									setCurrentPage(Math.min(totalPages, currentPage + 1))
-								}
-								disabled={currentPage === totalPages}>
-								Next
-							</Button>
+							<div className="flex gap-2">
+								<Button
+									variant="outline"
+									size="sm"
+									onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+									disabled={currentPage === 1}>
+									Previous
+								</Button>
+								<div className="flex gap-1">
+									{Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+										const pageNum = i + 1;
+										return (
+											<Button
+												key={pageNum}
+												variant={
+													currentPage === pageNum ? "default" : "outline"
+												}
+												size="sm"
+												className={cn(
+													currentPage === pageNum &&
+														"bg-primary-800 hover:cursor-pointer hover:bg-primary-800/80",
+												)}
+												onClick={() => setCurrentPage(pageNum)}>
+												{pageNum}
+											</Button>
+										);
+									})}
+								</div>
+								<Button
+									variant="outline"
+									size="sm"
+									onClick={() =>
+										setCurrentPage(Math.min(totalPages, currentPage + 1))
+									}
+									disabled={currentPage === totalPages}>
+									Next
+								</Button>
+							</div>
 						</div>
-					</div>
+					)}
 				</div>
 			)}
 		</>

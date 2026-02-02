@@ -2,7 +2,7 @@ import api from "@/api/api";
 import { useHeaderInitializer } from "@/hooks/use-header-initializer";
 import type { ProjectProposal } from "@/types";
 import { useEffect, useState } from "react";
-import ProposalCard from "../components/proposal-card";
+import ProposalCard from "./components/proposal-card";
 
 export default function MyProposasPage() {
 	useHeaderInitializer("MIIT | My Proposals", "My Proposals");

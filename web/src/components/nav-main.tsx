@@ -3,26 +3,25 @@ import {
 	SidebarGroupContent,
 	SidebarMenu,
 } from "@/components/ui/sidebar";
-import { useAuthUserStore } from "@/stores/useAuthUserStore";
 import { PlusCircleIcon } from "@heroicons/react/24/solid";
 import type { ComponentType } from "react";
 import { NavLink } from "react-router";
 
 export function NavMain({
 	items,
+	role,
 }: {
+	role: string;
 	items: {
 		title: string;
 		url: string;
 		icon?: ComponentType<{ className?: string }>;
 	}[];
 }) {
-	const authUser = useAuthUserStore((state) => state.authUser);
-
 	return (
 		<SidebarGroup>
 			<SidebarGroupContent className="flex flex-col gap-2">
-				{authUser.role === "Student" && (
+				{role === "Student" && (
 					<SidebarMenu className="mb-3">
 						<NavLink
 							to={"/project-proposals/create"}
@@ -32,6 +31,7 @@ export function NavMain({
 						</NavLink>
 					</SidebarMenu>
 				)}
+
 				<SidebarMenu className="gap-y-2 ">
 					{items.map((item) => (
 						<NavLink
@@ -50,20 +50,6 @@ export function NavMain({
 								<span className="text-[14px]">{item.title}</span>
 							</p>
 						</NavLink>
-						// <SidebarMenuItem key={item.title}>
-						// <SidebarMenuButton
-						//  className="border mb-2 py-5 w-[120px]"
-						//  tooltip={item.title}>
-						//  <NavLink
-						//   className="rounded-xl w-full bg-red-500 bor"
-						//   to={item.url}>
-						//   <p className="flex items-center w-[120px] gap-x-3 mx-auto py-5 ">
-						//    {item.icon && <item.icon />}
-						//    <span className="text-[14px]">{item.title}</span>
-						//   </p>
-						//  </NavLink>
-						// </SidebarMenuButton>
-						// </SidebarMenuItem>
 					))}
 				</SidebarMenu>
 			</SidebarGroupContent>

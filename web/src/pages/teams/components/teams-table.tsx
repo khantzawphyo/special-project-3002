@@ -252,43 +252,51 @@ export default function TeamsTable({ teamsData }: { teamsData: TeamsData[] }) {
 					</div>
 
 					{/* Pagination */}
-					<div className="flex items-center justify-between">
-						<div className="text-sm text-muted-foreground">
-							Page {currentPage} of {totalPages}
-						</div>
-						<div className="flex gap-2">
-							<Button
-								variant="outline"
-								size="sm"
-								onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-								disabled={currentPage === 1}>
-								Previous
-							</Button>
-							<div className="flex gap-1">
-								{Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-									const pageNum = i + 1;
-									return (
-										<Button
-											key={pageNum}
-											variant={currentPage === pageNum ? "default" : "outline"}
-											size="sm"
-											onClick={() => setCurrentPage(pageNum)}>
-											{pageNum}
-										</Button>
-									);
-								})}
+					{totalPages > 1 && (
+						<div className="flex items-center justify-between">
+							<div className="text-sm text-muted-foreground">
+								Page {currentPage} of {totalPages}
 							</div>
-							<Button
-								variant="outline"
-								size="sm"
-								onClick={() =>
-									setCurrentPage(Math.min(totalPages, currentPage + 1))
-								}
-								disabled={currentPage === totalPages}>
-								Next
-							</Button>
+							<div className="flex gap-2">
+								<Button
+									variant="outline"
+									size="sm"
+									onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+									disabled={currentPage === 1}>
+									Previous
+								</Button>
+								<div className="flex gap-1">
+									{Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+										const pageNum = i + 1;
+										return (
+											<Button
+												key={pageNum}
+												variant={
+													currentPage === pageNum ? "default" : "outline"
+												}
+												size="sm"
+												className={cn(
+													currentPage === pageNum &&
+														"bg-primary-800 hover:cursor-pointer hover:bg-primary-800/80",
+												)}
+												onClick={() => setCurrentPage(pageNum)}>
+												{pageNum}
+											</Button>
+										);
+									})}
+								</div>
+								<Button
+									variant="outline"
+									size="sm"
+									onClick={() =>
+										setCurrentPage(Math.min(totalPages, currentPage + 1))
+									}
+									disabled={currentPage === totalPages}>
+									Next
+								</Button>
+							</div>
 						</div>
-					</div>
+					)}
 				</div>
 			)}
 		</>

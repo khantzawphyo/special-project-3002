@@ -49,9 +49,16 @@ class UserController extends Controller
         return response()->json($students);
     }
 
-    public function showFacultiesList()
-    {
-        $users = User::where('is_student', false)->with('faculty')->get();
-        return UserResource::collection($users);
-    }
+  public function showFacultiesList()
+{
+    // Fetch users who are NOT students and do NOT have the Student Affairs role
+    $users = User::where('is_student', false)
+        ->whereDoesntHave('roles', function ($query) {
+            $query->where('name', 'Student Affairs');
+        })
+        ->with('faculty')
+        ->get();
+
+    return UserResource::collection($users);
+}
 }

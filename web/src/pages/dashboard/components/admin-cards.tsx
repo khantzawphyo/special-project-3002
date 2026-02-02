@@ -1,31 +1,28 @@
 import {
 	IconFileDescription,
 	IconListDetails,
-	IconTrendingUp,
 	IconUsersGroup,
-	type Icon,
 } from "@tabler/icons-react";
 
 import {
 	Card,
 	CardDescription,
-	CardFooter,
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
 import { ShieldCheckIcon } from "lucide-react";
 import { useNavigate } from "react-router";
 
-type SectionCardProps = {
-	title: string;
-	cardIcon?: Icon;
-	description: string;
-	footerTop: string;
-	footerBottom: string;
-	pageUrl: string;
-};
-
-export function AdminCards({ dashboardData }: any) {
+export function AdminCards({
+	dashboardData,
+}: {
+	dashboardData: {
+		noOfProposals: number;
+		noOfProjects: number;
+		noOfSupervisors: number;
+		noOfFaculties: number;
+	};
+}) {
 	const navigate = useNavigate();
 
 	const sectionCardData = [
@@ -33,33 +30,25 @@ export function AdminCards({ dashboardData }: any) {
 			title: dashboardData.noOfProjects ?? 0,
 			cardIcon: IconListDetails,
 			description: "Total Projects",
-			footerTop: "Project activity increasing this month",
-			footerBottom: "Overall workload remains stable",
 			pageUrl: "/projects",
 		},
 		{
 			title: dashboardData.noOfProposals ?? 0,
 			cardIcon: IconFileDescription,
 			description: "Total Proposals",
-			footerTop: "Project activity increasing this month",
-			footerBottom: "Overall workload remains stable",
 			pageUrl: "/project-proposals",
 		},
 		{
 			title: dashboardData.noOfSupervisors ?? 0,
 			cardIcon: ShieldCheckIcon,
 			description: "Total Supervisors",
-			footerTop: "Project activity increasing this month",
-			footerBottom: "Overall workload remains stable",
 			pageUrl: "/supervisors",
 		},
 		{
-			title: dashboardData.noOfTeams ?? 0,
+			title: dashboardData.noOfFaculties ?? 0,
 			cardIcon: IconUsersGroup,
-			description: "Total Teams",
-			footerTop: "Project activity increasing this month",
-			footerBottom: "Overall workload remains stable",
-			pageUrl: "/teams",
+			description: "Total Faculties",
+			pageUrl: "/faculties",
 		},
 	];
 
@@ -80,15 +69,6 @@ export function AdminCards({ dashboardData }: any) {
 								{card.title}
 							</CardTitle>
 						</CardHeader>
-						<CardFooter className="flex-col hidden items-start gap-1.5 text-sm">
-							<div className="line-clamp-1 hidden gap-2 font-medium">
-								{card.footerTop}
-								<IconTrendingUp className="hidden size-4" />
-							</div>
-							<div className="text-muted-foreground hidden">
-								{card.footerBottom}
-							</div>
-						</CardFooter>
 					</Card>
 				))}
 		</div>

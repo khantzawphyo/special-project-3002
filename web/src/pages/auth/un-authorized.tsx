@@ -3,7 +3,7 @@ import { IconArrowLeft } from '@tabler/icons-react';
 
 export default function UnAuthorized() {
 	return (
-    <div className='bg-transparent bg-center bg-cover flex min-h-svh flex-col items-center justify-center p-6 md:p-10 relative'>
+    <div className='bg-transparent bg-center min-h-svh bg-cover flex flex-col items-center justify-center p-6 md:p-10 relative'>
       <div className='max-w-2xl w-full p-8 md:p-12 rounded-xl bg-transparent backdrop-blur-sm text-center text-neutral-800'>
         <div className='space-y-4 flex flex-col items-center justify-center'>
           <img src='/403.svg' alt='403' className='w-100 h-100 object-cover' />
