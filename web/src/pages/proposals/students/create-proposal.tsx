@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useHeaderInitializer } from "@/hooks/use-header-initializer";
 import { HasRole } from "@/lib/utils";
-import { useAuthUserStore } from "@/stores/useAuthUserStore";
+import { useAuthStore } from "@/stores/useAuthStore";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { IconLoader, IconSend } from "@tabler/icons-react";
 import { useEffect, useRef, useState } from "react";
@@ -48,10 +48,12 @@ type User = {
 	email: string;
 };
 
+type Faculty = User & { department: string };
+
 export default function CreateProposalPage() {
 	useHeaderInitializer("MIIT | Proposal Submission", "Create New Proposal");
 
-	const [faculties, setFaculties] = useState<User[]>([]);
+	const [faculties, setFaculties] = useState<Faculty[]>([]);
 	const [students, setStudents] = useState<User[]>([]);
 
 	const loadInitialData = async () => {
@@ -71,7 +73,7 @@ export default function CreateProposalPage() {
 		loadInitialData();
 	}, []);
 
-	const authUser = useAuthUserStore((state) => state.authUser);
+	const authUser = useAuthStore((state) => state.authUser);
 
 	const {
 		register,
@@ -86,7 +88,7 @@ export default function CreateProposalPage() {
 			description: "",
 			fileUrl: "",
 			members: [],
-			student_id: authUser.id,
+			student_id: authUser?.id,
 			supervisor_id: "",
 		},
 		mode: "onChange",
@@ -100,7 +102,7 @@ export default function CreateProposalPage() {
 	const onSubmit = async (data: z.infer<typeof ProposalSchema>) => {
 		const formattedData = {
 			...data,
-			members: [...data.members.map((id) => parseInt(id, 10)), authUser.id],
+			members: [...data.members.map((id) => parseInt(id, 10)), authUser?.id],
 			supervisor_id: parseInt(data.supervisor_id, 10),
 		};
 		const res = await api.post("/proposals/create", formattedData);

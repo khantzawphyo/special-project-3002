@@ -17,6 +17,8 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasRoles, HasFactory, Notifiable, HasApiTokens;
 
+    public $timestamps = false;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -26,6 +28,7 @@ class User extends Authenticatable
         'name',
         'email',
         'is_student',
+        'avatar_url',
         'password',
     ];
 

@@ -18,8 +18,10 @@ class FacultySeeder extends Seeder
 
         $adminUsers = User::where('is_student', false)->take(3)->get();
         $stuAffair = User::where('email', "student_affairs@miit.edu.mm")->first();
-        $facultyUsers = User::where('is_student', false)->take(3)->get();
-        $facultyUsers = User::where('is_student', false)->offset(4)->take(100)->get();
+        $facultyUsers = User::where('is_student', false)
+            ->orderBy('id', 'desc')
+            ->offset(4)
+            ->get();
 
         $rector = $adminUsers->first();
         $proRectors = $adminUsers->slice(1, 2);
@@ -34,8 +36,8 @@ class FacultySeeder extends Seeder
         $faculty_data[] = [
             'phone_number' => $this->generateMyanmarPhoneNumber(),
             'user_id' => $stuAffair->id,
-            'rank_id' => 6,
-            'department_id' => 2
+            'rank_id' => 8,
+            'department_id' => 1
         ];
 
         foreach ($proRectors as $proRector) {
@@ -52,7 +54,7 @@ class FacultySeeder extends Seeder
                 'phone_number' => $this->generateMyanmarPhoneNumber(),
                 'user_id' => $facultyUser->id,
                 'rank_id' => fake()->numberBetween(3, 7),
-                'department_id' => fake()->numberBetween(3, 5)
+                'department_id' => fake()->numberBetween(3, 8)
             ];
         }
         Faculty::insert($faculty_data);

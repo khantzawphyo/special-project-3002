@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { HasRole } from "@/lib/utils";
-import { useAuthUserStore } from "@/stores/useAuthUserStore";
+import { useAuthStore } from "@/stores/useAuthStore";
 import type { Comment } from "@/types";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/solid";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -30,11 +30,10 @@ export default function CommentBox({
 	proposalId: number;
 	proposalStatus: "approved" | "rejected" | "pending";
 }) {
-	const authUser = useAuthUserStore((state) => state.authUser);
+	const authUser = useAuthStore((state) => state.authUser);
 	const isStudentAffair = HasRole("Student Affairs");
 	const [isRefreshing, setIsRefreshing] = useState(false);
 	const [comments, setComments] = useState<Comment[]>([]);
-	const [editId, setEditId] = useState<number>(0);
 	const isPendingProposal = proposalStatus === "pending";
 
 	const fetchInitialCommits = async () => {

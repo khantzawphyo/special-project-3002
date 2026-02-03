@@ -7,11 +7,11 @@ export default function GuestLayout({
 }: {
 	children: React.ReactNode;
 }) {
-	const authToken = useAuthStore((state) => state.authToken);
+	const token = useAuthStore((state) => state.token);
 
 	return (
 		<>
-			{!authToken ? (
+			{!token ? (
 				<div className="bg-[url(/main-bg.jpg)] min-h-svh bg-center bg-cover">
 					{children}
 				</div>

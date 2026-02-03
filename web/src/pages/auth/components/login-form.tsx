@@ -19,7 +19,6 @@ import {
 import { useHeaderInitializer } from "@/hooks/use-header-initializer";
 import { useTheme } from "@/hooks/use-theme";
 import { useAuthStore } from "@/stores/useAuthStore";
-import { useAuthUserStore } from "@/stores/useAuthUserStore";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { IconEye, IconEyeOff, IconLogin2, IconMail } from "@tabler/icons-react";
 import { useState } from "react";
@@ -39,8 +38,7 @@ export function LoginForm() {
 	const navigate = useNavigate();
 	const [showPwd, setShowPwd] = useState(false);
 	const { theme } = useTheme();
-	const setAuthToken = useAuthStore((state) => state.setAuthToken);
-	const setAuthUser = useAuthUserStore((state) => state.setAuthUser);
+	const setAuthUser = useAuthStore((state) => state.setAuth);
 	useHeaderInitializer("MIIT | Log In to the site", "");
 
 	const {
@@ -63,8 +61,7 @@ export function LoginForm() {
 		try {
 			const res = await api.post("login", data);
 			if (res.data) {
-				setAuthUser(res.data.user);
-				setAuthToken(res.data.token);
+				setAuthUser(res.data);
 				navigate("/dashboard");
 			}
 		} catch (error: any) {

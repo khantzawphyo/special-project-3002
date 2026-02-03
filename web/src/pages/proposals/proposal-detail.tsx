@@ -21,13 +21,13 @@ import {
 import { Download, Loader2, ShieldCheck, TrashIcon } from "lucide-react";
 
 import api from "@/api/api";
-import { useAuthUserStore } from "@/stores/useAuthUserStore";
 import type { ProjectProposal } from "@/types";
 import { PencilSquareIcon } from "@heroicons/react/24/solid";
 import { IconUsersGroup } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 
+import { useAuthStore } from "@/stores/useAuthStore";
 import ApprovalModal from "./components/approval-modal";
 import CommentBox from "./components/comment-box";
 
@@ -36,7 +36,7 @@ export default function ProposalDetail() {
 	const { slug } = useParams();
 	const isIC = HasRole("IC");
 	const isStudent = HasRole("Student");
-	const authUser = useAuthUserStore((state) => state.authUser);
+	const authUser = useAuthStore((state) => state.authUser);
 	const [proposal, setProposal] = useState<ProjectProposal | null>();
 	const [loading, setLoading] = useState(true);
 	const [showApprovalModal, setShowApprovalModal] = useState(false);

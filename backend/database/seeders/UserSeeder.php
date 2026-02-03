@@ -60,7 +60,7 @@ class UserSeeder extends Seeder
         $facultyPassword = Hash::make('faculty123');
         $faculty_data = [];
 
-        for ($i = 0; $i < 15; $i++) {
+        for ($i = 0; $i < 100; $i++) {
             $isMale = $i % 2 == 0;
 
             $name = $isMale

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('students', function (Blueprint $table) {
             $table->id();
-            $table->string("phone_number");
+            $table->string("phone_number")->nullable();
             $table->string("gpa")->nullable();
             $table->enum("graduation_status", ["Active", "Graduated", "On Leave"]);
             $table->foreignId("user_id")->constrained("users")

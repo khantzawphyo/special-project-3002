@@ -1,4 +1,4 @@
-import { useAuthUserStore } from "@/stores/useAuthUserStore";
+import { useAuthStore } from "@/stores/useAuthStore";
 import { useSiteHeaderStore } from "@/stores/useSiteHeaderStore";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -19,7 +19,7 @@ export const useHeader = () => {
 type UserRole = "IC" | "Supervisor" | "Faculty" | "Student" | "Student Affairs";
 
 export const HasRole = (role: UserRole): boolean => {
-	const authUser = useAuthUserStore((state) => state.authUser);
+	const authUser = useAuthStore((state) => state.authUser);
 
 	return authUser?.role === role;
 };

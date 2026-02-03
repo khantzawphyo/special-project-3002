@@ -17,7 +17,8 @@ class FacultyResource extends JsonResource
         return [
             "phoneNumber" => $this->phone_number,
             'rank' => $this->rank->name,
-            'departmentName' => $this->department->name
+            'departmentName' => $this->department->name,
+            'address' => $this->address,
         ];
     }
 }

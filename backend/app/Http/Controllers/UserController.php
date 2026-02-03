@@ -12,13 +12,25 @@ class UserController extends Controller
 {
     public function getFacultiesForProposal()
     {
-        $faculties = User::select('id', 'name', 'email')
+        $users = User::select('id', 'name', 'email')
             ->where('is_student', false)
             ->whereHas('roles', function ($query) {
                 $query->where('name', 'Faculty');
             })
             ->orderBy('id', 'asc')
+            ->offset(4)
             ->get();
+
+        // Map to include department name
+        $faculties = $users->map(function ($user) {
+            return [
+                'id' => $user->id,
+                'name' => $user->name,
+                'role' => $user->roles->pluck('name'),
+                'email' => $user->email,
+                'department' => $user->faculty->department ? $user->faculty->department->name : null,
+            ];
+        });
 
         return response()->json($faculties);
     }
@@ -49,16 +61,16 @@ class UserController extends Controller
         return response()->json($students);
     }
 
-  public function showFacultiesList()
-{
-    // Fetch users who are NOT students and do NOT have the Student Affairs role
-    $users = User::where('is_student', false)
-        ->whereDoesntHave('roles', function ($query) {
-            $query->where('name', 'Student Affairs');
-        })
-        ->with('faculty')
-        ->get();
+    public function showFacultiesList()
+    {
+        // Fetch users who are NOT students and do NOT have the Student Affairs role
+        $users = User::where('is_student', false)
+            ->whereDoesntHave('roles', function ($query) {
+                $query->where('name', 'Student Affairs');
+            })
+            ->with('faculty')
+            ->get();
 
-    return UserResource::collection($users);
-}
+        return UserResource::collection($users);
+    }
 }

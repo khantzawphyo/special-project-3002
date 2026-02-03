@@ -3,11 +3,11 @@ import { useAuthStore } from "@/stores/useAuthStore";
 import { Navigate, Outlet, useLocation } from "react-router";
 
 export default function ProtectedRoute() {
-	const authToken = useAuthStore((state) => state.authToken);
+	const token = useAuthStore((state) => state.token);
 
 	const location = useLocation();
 
-	if (!authToken)
+	if (!token)
 		return (
 			<Navigate
 				to="/login"
@@ -16,7 +16,7 @@ export default function ProtectedRoute() {
 			/>
 		);
 
-	if (location.pathname === "/" && authToken)
+	if (location.pathname === "/" && token)
 		return (
 			<Navigate
 				to="/dashboard"

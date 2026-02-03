@@ -16,31 +16,35 @@ class RankSeeder extends Seeder
         Rank::insert([
             [
                 'name' => 'Rector',
-                'description' => 'The executive head and chief academic officer of the institution.'
+                'description' => 'Responsible for overall leadership and management of the institution.'
             ],
             [
                 'name' => 'Pro-Rector',
-                'description' => 'The deputy to the Rector, assisting in institutional management.'
+                'description' => 'Assists the Rector in managing academic and administrative affairs.'
             ],
             [
                 'name' => 'Professor',
-                'description' => 'A senior academic leader recognized for excellence in research and teaching.'
+                'description' => 'Leads research and teaching activities at the highest academic level.'
             ],
             [
                 'name' => 'Associate Professor',
-                'description' => 'A mid-level academic with significant experience in their field.'
+                'description' => 'Experienced academic contributing to research and teaching.'
             ],
             [
                 'name' => 'Lecturer',
-                'description' => 'A faculty member primarily responsible for delivering course instruction.'
+                'description' => 'Delivers lectures and supports student learning.'
             ],
             [
                 'name' => 'Assistant Lecturer',
-                'description' => 'A junior faculty member assisting in teaching and academic duties.'
+                'description' => 'Supports lecturers in teaching and academic tasks.'
             ],
             [
                 'name' => 'Tutor',
-                'description' => 'An entry-level role providing academic support and small-group guidance.'
+                'description' => 'Provides academic guidance and support to students.'
+            ],
+            [
+                'name' => 'Student Affairs',
+                'description' => 'Handles student services and supports student development.'
             ],
         ]);
     }

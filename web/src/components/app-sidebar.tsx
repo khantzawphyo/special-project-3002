@@ -5,7 +5,6 @@ import {
 	IconListCheck,
 	IconListDetails,
 	IconSettings,
-	IconUsers,
 	IconUsersGroup,
 } from "@tabler/icons-react";
 import * as React from "react";
@@ -20,14 +19,13 @@ import {
 } from "@/components/ui/sidebar";
 
 import { HasRole } from "@/lib/utils";
-import { useAuthUserStore } from "@/stores/useAuthUserStore";
+import { useAuthStore } from "@/stores/useAuthStore";
 import { ShieldCheckIcon } from "lucide-react";
 import AppLogo from "./app-logo";
-import adminAvatar from "/avatar.png";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 	// const { isMobile } = useSidebar();
-	const authUser = useAuthUserStore((state) => state.authUser);
+	const authUser = useAuthStore((state) => state.authUser);
 
 	const icTabs = [
 		{
@@ -155,9 +153,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
 	const data = {
 		user: {
-			name: authUser.name,
-			email: authUser.email,
-			avatar: adminAvatar,
+			name: authUser?.name,
+			email: authUser?.email,
+			avatar: authUser?.avatar_url,
 		},
 		navMain: [
 			...(HasRole("IC") ? tabs.IC : []),
@@ -181,7 +179,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 			</SidebarHeader>
 			<SidebarContent>
 				<NavMain
-					role={authUser.role}
+					role={authUser?.role}
 					items={data.navMain}
 				/>
 			</SidebarContent>

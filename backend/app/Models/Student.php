@@ -8,7 +8,9 @@ use Spatie\Permission\Traits\HasRoles;
 class Student extends Model
 {
     use HasRoles;
-    protected $fillable = ["phone_number", "gpa", "graduation_status", "user_id", "major_id"];
+    public $timestamps = false;
+
+    protected $fillable = ["phone_number", 'address', "gpa", "graduation_status", "user_id", "major_id"];
 
     public function major()
     {

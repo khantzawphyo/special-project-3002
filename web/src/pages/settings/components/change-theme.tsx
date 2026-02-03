@@ -13,7 +13,7 @@ export default function ChangeTheme() {
 	const { theme, toggleTheme } = useTheme();
 
 	return (
-		<Card>
+		<Card className="py-5">
 			<CardHeader>
 				<CardTitle>Appearance</CardTitle>
 				<CardDescription>Customize how the app looks</CardDescription>

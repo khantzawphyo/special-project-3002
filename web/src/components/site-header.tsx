@@ -1,6 +1,6 @@
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { useAuthUserStore } from "@/stores/useAuthUserStore";
+import { useAuthStore } from "@/stores/useAuthStore";
 import { useSiteHeaderStore } from "@/stores/useSiteHeaderStore";
 import { useEffect, useState } from "react";
 import { NavUser } from "./nav-user";
@@ -19,13 +19,13 @@ export function SiteHeader() {
 		return () => window.removeEventListener("scroll", handleScroll);
 	}, []);
 
-	const authUser = useAuthUserStore((state) => state.authUser);
+	const authUser = useAuthStore((state) => state.authUser);
 
 	const data = {
 		user: {
 			name: authUser.name,
 			email: authUser.email,
-			avatar: "/avatar.jpg",
+			avatar: authUser.avatar_url,
 		},
 	};
 

@@ -46,7 +46,10 @@ class DatabaseSeeder extends Seeder
         $studentAffairs->save();
         $studentAffairs->refresh();
 
-        $faculties = User::where('is_student', false)->offset(4)->take(19)->get();
+        $faculties = User::where('is_student', false)
+            ->offset(4)
+            ->orderBy('id', 'desc')
+            ->get();
         foreach ($faculties as $faculty) {
             $faculty->assignRole($facultyRole);
             $faculty->save();

@@ -1,15 +1,14 @@
 import api from "@/api/api";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { FieldDescription } from "@/components/ui/field";
 import { useAuthStore } from "@/stores/useAuthStore";
-import { useAuthUserStore } from "@/stores/useAuthUserStore";
 import { IconLogout } from "@tabler/icons-react";
 import { useNavigate } from "react-router";
 
 export default function AccountLogout() {
 	const navigate = useNavigate();
-	const setAuthToken = useAuthStore((state) => state.setAuthToken);
-	const setAuthUser = useAuthUserStore((state) => state.setAuthUser);
+	const logout = useAuthStore((state) => state.logout);
 
 	const handleLogout = async () => {
 		try {
@@ -20,19 +19,19 @@ export default function AccountLogout() {
 				error,
 			);
 		} finally {
-			setAuthToken("");
-			setAuthUser("");
-			delete api.defaults.headers.common["Authorization"];
+			logout();
 			navigate("/login", { replace: true });
 		}
 	};
 
 	return (
-		<Card>
+		<Card className="py-5">
 			<div className="px-5 flex items-start justify-between">
 				<div>
 					<h3 className="font-semibold">Account</h3>
-					<p className="text-sm">Sign out of your MIIT account</p>
+					<FieldDescription className="text-sm">
+						Sign out of your MIIT account
+					</FieldDescription>
 				</div>
 				<Button
 					onClick={handleLogout}

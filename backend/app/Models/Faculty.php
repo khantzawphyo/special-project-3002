@@ -6,7 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Faculty extends Model
 {
-    protected $fillable = ['phone_number', 'user_id', 'rank_id', 'department_id'];
+    public $timestamps = false;
+
+    protected $fillable = ['phone_number', 'address', 'user_id', 'rank_id', 'department_id'];
 
     public function user()
     {

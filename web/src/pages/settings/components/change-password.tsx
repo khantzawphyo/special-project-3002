@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input";
 
 export default function ChangePassword() {
 	return (
-		<Card>
+		<Card className="py-5">
 			<CardHeader>
 				<CardTitle>Security</CardTitle>
 				<CardDescription>Customize how the app looks</CardDescription>
@@ -29,9 +29,10 @@ export default function ChangePassword() {
 						<FieldContent>
 							<Input
 								type="password"
-								placeholder="******"
+								placeholder="********"
 							/>
 						</FieldContent>
+						<CardDescription>Enter your current password.</CardDescription>
 					</Field>
 
 					<Field>
@@ -39,16 +40,17 @@ export default function ChangePassword() {
 						<FieldContent>
 							<Input
 								type="password"
-								placeholder="******"
+								placeholder="********"
 							/>
 						</FieldContent>
+						<CardDescription>
+							Re-enter your new password to confirm.
+						</CardDescription>
 					</Field>
 
-					<div className="flex justify-end">
-						<Button className="bg-primary-700 hover:bg-primary-800 dark:bg-primary-700 dark:hover:bg-primary-800 dark:text-white">
-							Save changes
-						</Button>
-					</div>
+					<Button className="bg-primary-700 max-w-fit ml-auto hover:bg-primary-800 dark:bg-primary-700 dark:hover:bg-primary-800 dark:text-white">
+						Save changes
+					</Button>
 				</FieldGroup>
 			</CardContent>
 		</Card>
