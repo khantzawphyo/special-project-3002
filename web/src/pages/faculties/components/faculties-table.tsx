@@ -322,7 +322,7 @@ export default function UsersTable({
 
 							<div className="flex items-center ml-auto gap-x-3">
 								<Button
-									className="hover:cursor-pointer bg-primary-800 hover:bg-primary-800/80 ml-auto hover:text-white text-white"
+									className="hover:cursor-pointer hidden bg-primary-800 hover:bg-primary-800/80 ml-auto hover:text-white text-white"
 									onClick={() => alert("Refreshing...")}
 									variant={"outline"}>
 									<IconRefresh />

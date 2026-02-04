@@ -21,6 +21,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::controller(AuthController::class)->group(function () {
         Route::patch("/update-profile", 'updateProfile');
+        Route::post("/reset-password", 'resetPassword');
     });
 
     Route::controller(DashboardController::class)->group(function () {
