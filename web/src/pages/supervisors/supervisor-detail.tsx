@@ -1,258 +1,185 @@
-import { useNavigate, useParams } from "react-router";
-
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-
+import { Button } from '@/components/ui/button';
 import {
-	ArrowLeftIcon,
-	EnvelopeIcon,
-	PhoneIcon,
-} from "@heroicons/react/24/outline";
-
-import { Shield } from "lucide-react";
-
-import Loading from "@/components/loading";
-import { useHeaderInitializer } from "@/hooks/use-header-initializer";
-import type { UsersData } from "@/types";
-import { useEffect, useState } from "react";
-
-// Demo data - in production, this would come from an API
-const demoSupervisorData: UsersData[] = [
-	{
-		id: 1,
-		name: "Dr. John Smith",
-		email: "john.smith@miit.edu.mm",
-		role: "Supervisor",
-		status: "Active",
-		rank: "Professor",
-		departmentName: "Computer Science",
-		phoneNumber: "+95 9 123 456 789",
-	},
-	{
-		id: 2,
-		name: "Dr. Sarah Johnson",
-		email: "sarah.johnson@miit.edu.mm",
-		role: "Supervisor",
-		status: "Active",
-		rank: "Associate Professor",
-		departmentName: "Information Technology",
-		phoneNumber: "+95 9 234 567 890",
-	},
-	{
-		id: 3,
-		name: "Dr. Michael Chen",
-		email: "michael.chen@miit.edu.mm",
-		role: "Supervisor",
-		status: "Active",
-		rank: "Professor",
-		departmentName: "Software Engineering",
-		phoneNumber: "+95 9 345 678 901",
-	},
-	{
-		id: 4,
-		name: "Dr. Emily Davis",
-		email: "emily.davis@miit.edu.mm",
-		role: "Supervisor",
-		status: "Active",
-		rank: "Lecturer",
-		departmentName: "Computer Science",
-		phoneNumber: "+95 9 456 789 012",
-	},
-	{
-		id: 5,
-		name: "Dr. Robert Wilson",
-		email: "robert.wilson@miit.edu.mm",
-		role: "Supervisor",
-		status: "Active",
-		rank: "Associate Professor",
-		departmentName: "Information Technology",
-		phoneNumber: "+95 9 567 890 123",
-	},
-	{
-		id: 6,
-		name: "Dr. Lisa Anderson",
-		email: "lisa.anderson@miit.edu.mm",
-		role: "Supervisor",
-		status: "Active",
-		rank: "Assistant Lecturer",
-		departmentName: "Software Engineering",
-		phoneNumber: "+95 9 678 901 234",
-	},
-	{
-		id: 7,
-		name: "Dr. David Brown",
-		email: "david.brown@miit.edu.mm",
-		role: "Supervisor",
-		status: "Active",
-		rank: "Professor",
-		departmentName: "Computer Science",
-		phoneNumber: "+95 9 789 012 345",
-	},
-	{
-		id: 8,
-		name: "Dr. Jennifer Martinez",
-		email: "jennifer.martinez@miit.edu.mm",
-		role: "Supervisor",
-		status: "Active",
-		rank: "Lecturer",
-		departmentName: "Information Technology",
-		phoneNumber: "+95 9 890 123 456",
-	},
-	{
-		id: 9,
-		name: "Dr. James Taylor",
-		email: "james.taylor@miit.edu.mm",
-		role: "Supervisor",
-		status: "Active",
-		rank: "Associate Professor",
-		departmentName: "Software Engineering",
-		phoneNumber: "+95 9 901 234 567",
-	},
-	{
-		id: 10,
-		name: "Dr. Maria Garcia",
-		email: "maria.garcia@miit.edu.mm",
-		role: "Supervisor",
-		status: "Active",
-		rank: "Tutor",
-		departmentName: "Computer Science",
-		phoneNumber: "+95 9 012 345 678",
-	},
-	{
-		id: 11,
-		name: "Dr. William Lee",
-		email: "william.lee@miit.edu.mm",
-		role: "Supervisor",
-		status: "Active",
-		rank: "Professor",
-		departmentName: "Information Technology",
-		phoneNumber: "+95 9 123 456 789",
-	},
-	{
-		id: 12,
-		name: "Dr. Patricia White",
-		email: "patricia.white@miit.edu.mm",
-		role: "Supervisor",
-		status: "Active",
-		rank: "Lecturer",
-		departmentName: "Software Engineering",
-		phoneNumber: "+95 9 234 567 890",
-	},
-];
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { useHeaderInitializer } from '@/hooks/use-header-initializer';
+import {
+  CheckCircleIcon,
+  UserGroupIcon
+} from '@heroicons/react/24/outline';
+import { User } from 'lucide-react';
+import { useNavigate } from 'react-router';
 
 export default function SupervisorDetail() {
-	useHeaderInitializer("MIIT | Supervisor Detail", "Supervisor Detail");
-	const navigate = useNavigate();
-	const { id } = useParams();
-	const [supervisor, setSupervisor] = useState<UsersData | null>(null);
+  useHeaderInitializer('MIIT | Supervisor Detail', 'Supervisor Detail');
+  const navigate = useNavigate();
 
-	useEffect(() => {
-		// In production, fetch from API: api.get(`/supervisors/${id}`)
-		const foundSupervisor = demoSupervisorData.find((s) => s.id === Number(id));
-		setSupervisor(foundSupervisor || null);
-	}, [id]);
+  const supervisor = {
+    name: 'Dr. Aung Kyaw',
+    email: 'aung.kyaw@miit.edu.mm',
+    rank: 'Professor',
+    faculty: 'Faculty of Information Science',
+    phone: '+95 9 123 456 789',
+    imageUrl:
+      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200&h=200&auto=format&fit=crop',
+    activeProjects: [
+      {
+        id: 1,
+        title: 'Edge Computing for Smart Cities',
+        students: '3 Students',
+      },
+      {
+        id: 2,
+        title: 'Blockchain in Healthcare Data',
+        students: '4 Students',
+      },
+    ],
+    pastProjects: [
+      {
+        id: 101,
+        title: 'Real-time Traffic Monitoring System',
+        year: '2024',
+        outcome: 'Completed',
+      },
+      {
+        id: 102,
+        title: 'Distributed Database Optimization',
+        year: '2023',
+        outcome: 'Completed',
+      },
+    ],
+  };
 
-	return (
-		<div className="mx-auto max-w-7xl px-4">
-			<Button
-				onClick={() => navigate("/supervisors")}
-				variant="ghost"
-				className="mb-4 flex bg-primary-600 hover:bg-primary-500 text-white hover:cursor-pointer hover:text-white items-center gap-2">
-				<ArrowLeftIcon className="h-4 w-4" />
-				Back to Supervisors
-			</Button>
+  return (
+    <div className='mx-auto max-w-7xl px-4 pb-12'>
+      <div className='bg-white dark:bg-neutral-900 rounded-2xl shadow-lg p-6 mb-8'>
+        <div className='flex flex-col lg:flex-row items-center gap-6'>
+          <div className='flex items-center gap-6'>
+            <div className='h-28 w-28 rounded-2xl overflow-hidden bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center'>
+              {supervisor.imageUrl ? (
+                <img
+                  src={supervisor.imageUrl}
+                  alt={supervisor.name}
+                  className='h-full w-full object-cover'
+                />
+              ) : (
+                <User className='h-12 w-12 text-neutral-400' />
+              )}
+            </div>
+            <div>
+              <h1 className='text-2xl font-bold'>{supervisor.name}</h1>
+              <p className='text-sm text-neutral-500'>{supervisor.email}</p>
+              <p className='text-sm text-muted-foreground'>
+                {supervisor.rank} • {supervisor.faculty}
+              </p>
+            </div>
+          </div>
 
-			{!supervisor ? (
-				<Loading message="supervisor data" />
-			) : (
-				<>
-					<div className="flex items-center gap-3">
-						<div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary-600/50 dark:bg-primary-900">
-							<Shield className="h-6 w-6 text-primary-800 dark:text-white" />
-						</div>
-						<div>
-							<h1 className="text-2xl font-bold leading-tight">
-								Supervisor Profile
-							</h1>
-							<p className="text-sm text-muted-foreground">
-								View supervisor information
-							</p>
-						</div>
-					</div>
+          <div className='ml-auto flex items-center gap-3'>
+            <Button className='bg-primary-600 hover:bg-primary-700 dark:text-white px-4 py-2'>
+              Assign Project
+            </Button>
+          </div>
+        </div>
+      </div>
 
-					<div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-						{/* Main Info Card */}
-						<Card className="lg:col-span-2 rounded-2xl border border-neutral-200 shadow-sm dark:border-neutral-800">
-							<CardContent className="p-8">
-								<div className="grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-10">
-									{/* Name */}
-									<div>
-										<p className="text-xs uppercase tracking-wide text-muted-foreground">
-											Full Name
-										</p>
-										<p className="mt-1 text-lg font-semibold">
-											{supervisor.name}
-										</p>
-									</div>
+      <div className='grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8'>
+        <div className='bg-white dark:bg-neutral-900 rounded-lg p-4 shadow-sm border border-neutral-100 dark:border-neutral-800'>
+          <div className='text-sm text-neutral-500'>Active Supervisions</div>
+          <div className='text-2xl font-bold'>
+            {supervisor.activeProjects.length}
+          </div>
+        </div>
+        <div className='bg-white dark:bg-neutral-900 rounded-lg p-4 shadow-sm border border-neutral-100 dark:border-neutral-800'>
+          <div className='text-sm text-neutral-500'>Past Supervisions</div>
+          <div className='text-2xl font-bold'>
+            {supervisor.pastProjects.length}
+          </div>
+        </div>
+        <div className='bg-white dark:bg-neutral-900 rounded-lg p-4 shadow-sm border border-neutral-100 dark:border-neutral-800'>
+          <div className='text-sm text-neutral-500'>Contact</div>
+          <div className='text-sm font-medium'>{supervisor.email}</div>
+          <div className='text-sm text-muted-foreground'>
+            {supervisor.phone}
+          </div>
+        </div>
+      </div>
 
-									{/* Rank */}
-									<div>
-										<p className="text-xs uppercase tracking-wide text-muted-foreground">
-											Rank
-										</p>
-										<p className="mt-1 text-lg font-semibold">
-											{supervisor.rank}
-										</p>
-									</div>
+      <div className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
+        <div className='lg:col-span-1 space-y-6'>
+          <Card className='rounded-2xl'>
+            <CardHeader>
+              <CardTitle>Active Projects</CardTitle>
+              <CardDescription>
+                {supervisor.activeProjects.length} ongoing
+              </CardDescription>
+            </CardHeader>
+            <CardContent className='space-y-3'>
+              {supervisor.activeProjects.map((p) => (
+                <div
+                  key={p.id}
+                  className='p-3 rounded-lg border hover:shadow-sm transition'
+                >
+                  <div className='font-semibold'>{p.title}</div>
+                  <div className='text-xs text-muted-foreground mt-1 flex items-center gap-2'>
+                    <UserGroupIcon className='h-4 w-4' />
+                    <span>{p.students}</span>
+                  </div>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        </div>
 
-									{/* Email */}
-									<div>
-										<p className="text-xs uppercase tracking-wide text-muted-foreground">
-											Email Address
-										</p>
-										<p className="mt-1 flex items-center gap-2 text-base">
-											<EnvelopeIcon className="h-4 w-4 text-muted-foreground" />
-											{supervisor.email}
-										</p>
-									</div>
-
-									{/* Phone */}
-									{supervisor.phoneNumber && (
-										<div>
-											<p className="text-xs uppercase tracking-wide text-muted-foreground">
-												Phone Number
-											</p>
-											<p className="mt-1 flex items-center gap-2 text-base">
-												<PhoneIcon className="h-4 w-4 text-muted-foreground" />
-												{supervisor.phoneNumber}
-											</p>
-										</div>
-									)}
-
-									{/* Department */}
-									{supervisor.departmentName && (
-										<div className="sm:col-span-2">
-											<p className="text-xs uppercase tracking-wide text-muted-foreground">
-												Department
-											</p>
-											<p className="mt-1 text-lg font-semibold">
-												{supervisor.departmentName}
-											</p>
-										</div>
-									)}
-								</div>
-							</CardContent>
-						</Card>
-
-						{/* Side Panel (Optional Future Use) */}
-						<div className="hidden lg:block">
-							<div className="rounded-2xl border border-dashed border-neutral-300 p-6 text-sm text-muted-foreground dark:border-neutral-700">
-								testing
-							</div>
-						</div>
-					</div>
-				</>
-			)}
-		</div>
-	);
+        <div className='lg:col-span-2 space-y-6'>
+          <Card className='rounded-2xl'>
+            <CardHeader>
+              <CardTitle>Supervision History</CardTitle>
+              <CardDescription>Completed projects and outcomes</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className='overflow-x-auto'>
+                <table className='w-full text-left text-sm'>
+                  <thead className='bg-neutral-50 dark:bg-neutral-800/50 border-b'>
+                    <tr>
+                      <th className='p-3 font-semibold text-neutral-600'>
+                        Year
+                      </th>
+                      <th className='p-3 font-semibold text-neutral-600'>
+                        Project
+                      </th>
+                      <th className='p-3 font-semibold text-neutral-600'>
+                        Outcome
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className='divide-y divide-neutral-100 dark:divide-neutral-800'>
+                    {supervisor.pastProjects.map((proj) => (
+                      <tr
+                        key={proj.id}
+                        className='hover:bg-neutral-50/50 transition'
+                      >
+                        <td className='p-3 font-bold text-primary-600'>
+                          {proj.year}
+                        </td>
+                        <td className='p-3'>{proj.title}</td>
+                        <td className='p-3 text-sm text-emerald-600 font-semibold flex items-center gap-2'>
+                          <CheckCircleIcon className='h-4 w-4' />
+                          {proj.outcome}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </div>
+  );
 }
