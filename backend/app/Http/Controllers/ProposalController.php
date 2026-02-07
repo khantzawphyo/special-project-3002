@@ -101,7 +101,7 @@ class ProposalController extends Controller
     public function browseProposals()
     {
         try {
-            $proposals = Proposal::where('supervisor_id', 11)->with(['supervisor', 'leader', 'members'])->get();
+            $proposals = Proposal::where('supervisor_id', Auth::id())->with(['supervisor', 'leader', 'members'])->get();
 
             if ($proposals->isEmpty()) {
                 return response()->json([

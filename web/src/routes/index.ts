@@ -4,13 +4,15 @@ import ProtectedRoute from "@/pages/auth/protected-route";
 import DashboardPage from "@/pages/dashboard/dashboard";
 import FacultiesPage from "@/pages/faculties/page";
 import PermissionMatrix from "@/pages/permissions/page";
+import AssignedProjects from "@/pages/projects/faculties/assigned-projects";
 import ProjectsPage from "@/pages/projects/page";
+import MyProjects from "@/pages/projects/students/my-projects";
+import MyTasksPage from "@/pages/projects/students/tasks/my-tasks";
 import BrowseProposalsPage from "@/pages/proposals/faculties/browse-proposals";
 import ProjectsProposalPage from "@/pages/proposals/page";
 import ProposalDetailPage from "@/pages/proposals/proposal-detail";
 import CreateProposalPage from "@/pages/proposals/students/create-proposal";
 import EditProposalPage from "@/pages/proposals/students/edit-proposal";
-import MyProjects from "@/pages/proposals/students/my-projects";
 import MyProposasPage from "@/pages/proposals/students/my-proposals";
 import ChangePassword from "@/pages/settings/components/change-password";
 import ChangeProfile from "@/pages/settings/components/change-profile";
@@ -18,7 +20,6 @@ import ChangeTheme from "@/pages/settings/components/change-theme";
 import SettingsPage from "@/pages/settings/page";
 import SupervisorsPage from "@/pages/supervisors/page";
 import SupervisorDetailPage from "@/pages/supervisors/supervisor-detail";
-import MyTasksPage from "@/pages/teams/students/my-tasks";
 
 export const routes = [
 	{
@@ -64,6 +65,10 @@ export const routes = [
 			{
 				path: "/supervisors/:id/detail",
 				Component: SupervisorDetailPage,
+			},
+			{
+				path: "/assigned-projects",
+				Component: AssignedProjects,
 			},
 			{
 				path: "/projects",

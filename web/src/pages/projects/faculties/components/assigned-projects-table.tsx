@@ -18,39 +18,49 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { cn, STATUS_COLOR } from "@/lib/utils";
-import type { TeamsData } from "@/types";
-import { IconDownload, IconRefresh, IconUserCheck } from "@tabler/icons-react";
-import { Eye, Search, Settings2 } from "lucide-react";
+import { cn, PROJECT_STATUS_COLOR } from "@/lib/utils";
+import type { ProjectData } from "@/types";
+import { IconDownload, IconRefresh } from "@tabler/icons-react";
+import { Eye, Search, Settings2, ShieldCheckIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link } from "react-router";
 
-export default function TeamsTable({ teamsData }: { teamsData: TeamsData[] }) {
+export default function AssignedProjectsTable({
+	projects,
+}: {
+	projects: ProjectData[];
+}) {
 	const [searchTerm, setSearchTerm] = useState("");
 	const [currentPage, setCurrentPage] = useState(1);
 	const [visibleColumns, setVisibleColumns] = useState<Set<string>>(
-		new Set(["title", "leader", "members", "status", "started_at"]),
+		new Set([
+			"name",
+			"teamLeader",
+			"supervisor",
+			"members",
+			"status",
+			"approved_on",
+		]),
 	);
 	const itemsPerPage = 10;
 
-	const filteredTeams = useMemo(() => {
-		const filtered = teamsData.filter((team) => {
-			const matchesSearch =
-				team.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-				team.leader?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-				team.status?.toLowerCase().includes(searchTerm.toLowerCase());
+	const filteredProjects = useMemo(() => {
+		const filtered = projects.filter((project) => {
+			const matchesSearch = project.name
+				?.toLowerCase()
+				.includes(searchTerm.toLowerCase());
 			return matchesSearch;
 		});
 
 		return filtered;
-	}, [teamsData, searchTerm]);
+	}, [projects, searchTerm]);
 
-	const paginatedTeams = useMemo(() => {
+	const paginatedProjects = useMemo(() => {
 		const start = (currentPage - 1) * itemsPerPage;
-		return filteredTeams.slice(start, start + itemsPerPage);
-	}, [filteredTeams, currentPage]);
+		return filteredProjects.slice(start, start + itemsPerPage);
+	}, [filteredProjects, currentPage]);
 
-	const totalPages = Math.ceil(filteredTeams.length / itemsPerPage);
+	const totalPages = Math.ceil(filteredProjects.length / itemsPerPage);
 
 	const handleColumnToggle = (column: string) => {
 		const newColumns = new Set(visibleColumns);
@@ -64,12 +74,12 @@ export default function TeamsTable({ teamsData }: { teamsData: TeamsData[] }) {
 
 	return (
 		<>
-			{teamsData.length === 0 ? (
-				<Loading message="teams" />
+			{projects && projects.length === 0 ? (
+				<Loading message="projects" />
 			) : (
 				<div className="space-y-4 mt-5">
 					{/* Search and Filters */}
-					<div className="flex flex-col gap-4">
+					<div className="flex flex-col md:flex-row  gap-4">
 						<div className="flex gap-3">
 							<div className="relative flex-1 max-w-sm">
 								<Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -83,7 +93,6 @@ export default function TeamsTable({ teamsData }: { teamsData: TeamsData[] }) {
 									}}
 								/>
 							</div>
-
 							{/* View Toggle Button */}
 							<DropdownMenu>
 								<DropdownMenuTrigger asChild>
@@ -100,19 +109,24 @@ export default function TeamsTable({ teamsData }: { teamsData: TeamsData[] }) {
 									<DropdownMenuLabel>Toggle Columns</DropdownMenuLabel>
 									<DropdownMenuSeparator />
 									<DropdownMenuCheckboxItem
-										checked={visibleColumns.has("title")}
-										onCheckedChange={() => handleColumnToggle("title")}>
-										Title
+										checked={visibleColumns.has("name")}
+										onCheckedChange={() => handleColumnToggle("name")}>
+										Name
 									</DropdownMenuCheckboxItem>
 									<DropdownMenuCheckboxItem
-										checked={visibleColumns.has("leader")}
-										onCheckedChange={() => handleColumnToggle("leader")}>
-										Team Leader
+										checked={visibleColumns.has("supervisor")}
+										onCheckedChange={() => handleColumnToggle("supervisor")}>
+										Supervisor
+									</DropdownMenuCheckboxItem>
+									<DropdownMenuCheckboxItem
+										checked={visibleColumns.has("teamLeader")}
+										onCheckedChange={() => handleColumnToggle("teamLeader")}>
+										Project Leader
 									</DropdownMenuCheckboxItem>
 									<DropdownMenuCheckboxItem
 										checked={visibleColumns.has("members")}
 										onCheckedChange={() => handleColumnToggle("members")}>
-										Team Members
+										Project Members
 									</DropdownMenuCheckboxItem>
 									<DropdownMenuCheckboxItem
 										checked={visibleColumns.has("status")}
@@ -120,29 +134,28 @@ export default function TeamsTable({ teamsData }: { teamsData: TeamsData[] }) {
 										Status
 									</DropdownMenuCheckboxItem>
 									<DropdownMenuCheckboxItem
-										checked={visibleColumns.has("started_at")}
-										onCheckedChange={() => handleColumnToggle("started_at")}>
-										Started At
+										checked={visibleColumns.has("approved_on")}
+										onCheckedChange={() => handleColumnToggle("approved_on")}>
+										Approved On
 									</DropdownMenuCheckboxItem>
 								</DropdownMenuContent>
 							</DropdownMenu>
-
-							<div className="flex items-center ml-auto gap-x-3">
-								<Button
-									className="hover:cursor-pointer bg-primary-800 hover:bg-primary-800/80 ml-auto hover:text-white text-white"
-									onClick={() => alert("Refreshing...")}
-									variant={"outline"}>
-									<IconRefresh />
-									<span>Refresh</span>
-								</Button>
-								<Button
-									className="hover:cursor-pointer bg-primary-800 hover:bg-primary-800/80 ml-auto hover:text-white text-white"
-									onClick={() => alert("Downloading...")}
-									variant={"outline"}>
-									<IconDownload />
-									<span>Export</span>
-								</Button>
-							</div>
+						</div>
+						<div className="flex items-center ml-auto gap-x-3">
+							<Button
+								className="hover:cursor-pointer bg-primary-800 hover:bg-primary-800/80 ml-auto hover:text-white text-white"
+								onClick={() => alert("Refreshing...")}
+								variant={"outline"}>
+								<IconRefresh />
+								<span>Refresh</span>
+							</Button>
+							<Button
+								className="hover:cursor-pointer bg-primary-800 hover:bg-primary-800/80 ml-auto hover:text-white text-white"
+								onClick={() => alert("Downloading...")}
+								variant={"outline"}>
+								<IconDownload />
+								<span>Export</span>
+							</Button>
 						</div>
 					</div>
 
@@ -153,25 +166,30 @@ export default function TeamsTable({ teamsData }: { teamsData: TeamsData[] }) {
 						<Table>
 							<TableHeader className="bg-muted">
 								<TableRow>
-									{visibleColumns.has("title") && <TableHead>Title</TableHead>}
-									{visibleColumns.has("leader") && (
-										<TableHead>Team Leader</TableHead>
+									{visibleColumns.has("name") && (
+										<TableHead>Project Name</TableHead>
+									)}
+									{visibleColumns.has("supervisor") && (
+										<TableHead>Supervisor </TableHead>
+									)}
+									{visibleColumns.has("teamLeader") && (
+										<TableHead>Project Leader</TableHead>
 									)}
 									{visibleColumns.has("members") && (
-										<TableHead>Team Members</TableHead>
+										<TableHead>Project Members</TableHead>
 									)}
 									{visibleColumns.has("status") && (
 										<TableHead>Status</TableHead>
 									)}
-									{visibleColumns.has("started_at") && (
-										<TableHead>Started At</TableHead>
+									{visibleColumns.has("approved_on") && (
+										<TableHead>Approved On</TableHead>
 									)}
-									<TableHead className="w-12">Action</TableHead>
+									<TableHead className="w-24">Action</TableHead>
 								</TableRow>
 							</TableHeader>
 							<TableBody>
-								{paginatedTeams.length === 0 ? (
-									<TableRow>
+								{paginatedProjects.length === 0 ? (
+									<TableRow className="">
 										<TableCell
 											colSpan={visibleColumns.size + 1}
 											className="text-center py-8">
@@ -179,7 +197,7 @@ export default function TeamsTable({ teamsData }: { teamsData: TeamsData[] }) {
 												<Search className="h-12 w-12 text-muted-foreground opacity-50" />
 												<div>
 													<h3 className="font-semibold text-foreground">
-														No teams found
+														No Projects found
 													</h3>
 													<p className="text-sm text-muted-foreground">
 														Try adjusting your search or filters
@@ -189,34 +207,44 @@ export default function TeamsTable({ teamsData }: { teamsData: TeamsData[] }) {
 										</TableCell>
 									</TableRow>
 								) : (
-									paginatedTeams.map((team) => (
+									paginatedProjects.map((project) => (
 										<TableRow
-											key={team.id}
+											key={project.id}
 											className="px-3">
-											{visibleColumns.has("title") && (
-												<TableCell>{team?.title}</TableCell>
+											{visibleColumns.has("name") && (
+												<TableCell className="font-semibold">
+													{project.name.length > 50
+														? project.name.substring(0, 50) + "..."
+														: project.name}
+												</TableCell>
 											)}
-											{visibleColumns.has("leader") && (
+
+											{visibleColumns.has("supervisor") && (
 												<TableCell>
 													<div className="flex items-center gap-2">
-														<IconUserCheck className="h-5 w-5 text-primary-700" />
-														<span className="text-sm">{team.leader?.name}</span>
+														<ShieldCheckIcon className="h-5 w-5 text-primary-700" />
+														<span className="text-sm">
+															{project.supervisor.name}
+														</span>
 													</div>
 												</TableCell>
 											)}
+											{visibleColumns.has("teamLeader") && (
+												<TableCell>{project.leader.name}</TableCell>
+											)}
 											{visibleColumns.has("members") && (
 												<TableCell>
-													<div className="flex flex-wrap gap-1">
-														{team.members.slice(0, 2).map((team) => (
+													<div className="flex flex-wrap gap-1 text-muted-foreground">
+														{project.members.slice(0, 2).map((member) => (
 															<Badge
-																key={team.id}
+																key={member.id}
 																variant="secondary">
-																{team.name}
+																{member.name}
 															</Badge>
 														))}
-														{team.members.length > 2 && (
+														{project.members.length > 2 && (
 															<Badge variant="secondary">
-																+{team.members.length - 2}
+																+{project.members.length - 2}
 															</Badge>
 														)}
 													</div>
@@ -226,20 +254,20 @@ export default function TeamsTable({ teamsData }: { teamsData: TeamsData[] }) {
 												<TableCell>
 													<Badge
 														className={cn(
-															STATUS_COLOR(team.status),
+															PROJECT_STATUS_COLOR("active"),
 															"px-3 font-mono rounded-md capitalize",
 														)}>
-														{team.status}
+														{project.status}
 													</Badge>
 												</TableCell>
 											)}
-											{visibleColumns.has("started_at") && (
-												<TableCell>{team.started_at}</TableCell>
+											{visibleColumns.has("approved_on") && (
+												<TableCell>{project.startedAt}</TableCell>
 											)}
 											<TableCell className="border">
 												<Link
-													to={`/supervisors/detail/${team.id}`}
-													className="bg-primary-800 hover:cursor-pointer hover:bg-primary-800/80 flex items-center text-white px-2 py-1.5 rounded-md gap-x-1">
+													to={`/projects/${project?.slug}/detail`}
+													className="bg-primary-800 hover:cursor-pointer hover:bg-primary-800/80 flex items-center text-white px-2 py-2 rounded-md gap-x-1 justify-center">
 													<Eye className="size-4" />
 													<span className="text-[12px]">View</span>
 												</Link>

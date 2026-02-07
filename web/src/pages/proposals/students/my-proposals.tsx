@@ -13,7 +13,6 @@ export default function MyProposasPage() {
 	const fetchProposals = async () => {
 		try {
 			const res = await api.get("/proposals/my-proposals");
-			console.log(res.data);
 			setProposals(res.data);
 		} catch (error) {
 			console.error("Error fetching proposals:", error);

@@ -18,8 +18,8 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { cn, STATUS_COLOR } from "@/lib/utils";
-import type { Project, ProjectData, ProjectProposal } from "@/types";
+import { cn, PROPOSAL_STATUS_COLOR } from "@/lib/utils";
+import type { Project, ProjectProposal } from "@/types";
 import { IconDownload, IconRefresh } from "@tabler/icons-react";
 import {
 	Eye,
@@ -95,8 +95,8 @@ export default function ProposalTable({
 
 		if (sortColumn) {
 			filtered.sort((a, b) => {
-				let aVal: any = a[sortColumn as keyof Project];
-				let bVal: any = b[sortColumn as keyof Project];
+				let aVal: any = a[sortColumn as keyof ProjectProposal];
+				let bVal: any = b[sortColumn as keyof ProjectProposal];
 				if (typeof aVal === "string") {
 					aVal = aVal.toLowerCase();
 					bVal = (bVal as string).toLowerCase();
@@ -449,7 +449,7 @@ export default function ProposalTable({
 												<TableCell>
 													<Badge
 														className={cn(
-															STATUS_COLOR(project.status),
+															PROPOSAL_STATUS_COLOR(project.status),
 															"px-3 font-mono rounded-md capitalize",
 														)}>
 														{project.status}

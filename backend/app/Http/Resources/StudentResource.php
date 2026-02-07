@@ -19,7 +19,8 @@ class StudentResource extends JsonResource
             "phoneNumber" => $this->phone_number,
             'address' => $this->address,
             'gpa' => $this->gpa,
-            'graduationStatus' => $this->graduation_status
-        ];;
+            'graduationStatus' => $this->graduation_status,
+            // 'hasSubmittedProposal' => $this->proposals,
+        ];
     }
 }

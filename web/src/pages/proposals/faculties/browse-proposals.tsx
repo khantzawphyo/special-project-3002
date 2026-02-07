@@ -2,7 +2,7 @@ import api from "@/api/api";
 import { useHeaderInitializer } from "@/hooks/use-header-initializer";
 import type { ProjectProposal } from "@/types";
 import { useEffect, useState } from "react";
-import ProposalCard from "../students/components/proposal-card";
+import ProposalTable from "../proposals-table";
 
 export default function BrowseProposalsPage() {
 	useHeaderInitializer("MIIT | Browse Proposals", "Browse Proposals");
@@ -25,22 +25,20 @@ export default function BrowseProposalsPage() {
 
 	return (
 		<>
-			<div className="px-4 lg:px-6">
+			<div className="mx-auto max-w-7xl">
 				<h1 className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
-					Project Proposals
+					Browse Proposals
 				</h1>
 				<p className="text-sm text-neutral-500">
 					Browse and manage project proposals with team assignments and
 					supervisors.
 				</p>
-				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-					{proposals.map((proposal) => (
-						<ProposalCard
-							key={proposal.id}
-							proposal={proposal}
-						/>
-					))}
-				</div>
+				{proposals && (
+					<ProposalTable
+						getProposalsData={fetchBrowseProposals}
+						proposalData={proposals}
+					/>
+				)}
 			</div>
 		</>
 	);

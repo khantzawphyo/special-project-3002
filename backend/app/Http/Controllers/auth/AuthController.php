@@ -7,6 +7,7 @@ use App\Http\Requests\auth\LoginRequest;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Validation\ValidationException;
 
@@ -48,6 +49,29 @@ class AuthController extends Controller
             'user' => new UserResource(Auth::user()->load(['student', 'faculty'])),
             'token' => $request->bearerToken()
         ], 200);
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $user = Auth::user();
+
+        // Check if current_password matches the authenticated user's password
+        if (!Hash::check($request->input('current_password'), $user->password)) {
+            return response()->json([
+                'errors' => [
+                    "current_password" => 'Current password is incorrect.'
+                ]
+            ], 422);
+        } else {
+            // Update the user's password
+            $user->password = bcrypt($request->input('password'));
+            $user->save();
+
+            return response()->json([
+                'user' => new UserResource(Auth::user()->load(['student', 'faculty'])),
+                'token' => $request->bearerToken()
+            ], 200);
+        }
     }
 
     public function login(LoginRequest $request)

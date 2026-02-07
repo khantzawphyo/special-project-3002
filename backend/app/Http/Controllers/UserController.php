@@ -69,6 +69,7 @@ class UserController extends Controller
                 $query->where('name', 'Student Affairs');
             })
             ->with('faculty')
+            ->orderBy('id', 'asc')
             ->get();
 
         return UserResource::collection($users);

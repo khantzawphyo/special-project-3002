@@ -76,6 +76,10 @@ class FileController extends Controller
         if ($request->hasFile('file')) {
             $request->validate([
                 'file' => ['required', 'mimes:pdf,doc,docx', 'max:10240'],
+            ], [
+                'file.required' => 'Please upload a file.',
+                'file.mimes' => 'Only PDF, DOC, or DOCX files are allowed.',
+                'file.max' => 'File size must not exceed 10MB.',
             ]);
 
             $path = $request->file('file')->store('proposals', 's3');

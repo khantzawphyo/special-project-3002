@@ -19,7 +19,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { cn, STATUS_COLOR } from "@/lib/utils";
+import { cn, PROJECT_STATUS_COLOR } from "@/lib/utils";
 import type { UsersData } from "@/types";
 import { IconDownload, IconRefresh } from "@tabler/icons-react";
 import {
@@ -322,7 +322,7 @@ export default function UsersTable({
 
 							<div className="flex items-center ml-auto gap-x-3">
 								<Button
-									className="hover:cursor-pointer bg-primary-800 hover:bg-primary-800/80 ml-auto hover:text-white text-white"
+									className="hover:cursor-pointer hidden bg-primary-800 hover:bg-primary-800/80 ml-auto hover:text-white text-white"
 									onClick={() => alert("Refreshing...")}
 									variant={"outline"}>
 									<IconRefresh />
@@ -453,7 +453,7 @@ export default function UsersTable({
 												<TableCell>{user.name}</TableCell>
 											)}
 											{visibleColumns.has("email") && (
-												<TableCell className="text-muted-foreground">
+												<TableCell>
 													{user.email}
 												</TableCell>
 											)}
@@ -472,7 +472,7 @@ export default function UsersTable({
 												<TableCell>
 													<Badge
 														className={cn(
-															STATUS_COLOR("active"),
+															PROJECT_STATUS_COLOR("active"),
 															"px-3 font-mono rounded-md capitalize",
 														)}>
 														{user.status}

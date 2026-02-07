@@ -33,7 +33,7 @@ export default function ProposalCard({ proposal }: ProposalCardProps) {
 			<Card className="flex flex-col justify-between border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200">
 				<CardHeader>
 					<div className="flex items-start justify-between gap-x-3">
-						<CardTitle className="text-lg font-semibold line-clamp-2">
+						<CardTitle className="text-lg font-semibold line-clamp-1">
 							{proposal.title}
 						</CardTitle>
 						<Badge

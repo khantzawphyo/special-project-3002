@@ -22,8 +22,8 @@ class DashboardController extends Controller
             return $this->getStudentAffairsDashboardData();
         }
 
-        if ($user->hasRole('Supervisor')) {
-            return "Supervisor Role - Mentoring and grading active projects";
+        if ($user->hasRole('Supervisor') || $user->hasRole('Faculty')) {
+            return $this->getFacultyDashboardData();
         }
 
         if ($user->hasRole('Student')) {
@@ -37,10 +37,10 @@ class DashboardController extends Controller
         $noOfProjects = Project::all()->count();
         $noOfSupervisors = Project::distinct('supervisor_id')->count('supervisor_id');
         $noOfFaculties = User::where('is_student', false)
-        ->whereDoesntHave('roles', function ($query) {
-            $query->where('name', 'Student Affairs');
-        })
-        ->count();
+            ->whereDoesntHave('roles', function ($query) {
+                $query->where('name', 'Student Affairs');
+            })
+            ->count();
 
         return response()->json(
             [
@@ -50,6 +50,11 @@ class DashboardController extends Controller
                 'noOfFaculties' => $noOfFaculties
             ]
         );
+    }
+
+    private function getFacultyDashboardData()
+    {
+        return "Hit";
     }
 
     private function getStudentAffairsDashboardData()

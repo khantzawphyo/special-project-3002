@@ -1,10 +1,10 @@
 import { useHeaderInitializer } from "@/hooks/use-header-initializer";
-import { TeamCard } from "../../projects/students/components/project-card";
+import { ProjectCard } from "@/pages/projects/students/components/project-card";
 
-export default function MyTeams() {
-	useHeaderInitializer("MIIT | My Teams", "My Teams");
+export default function MyProjects() {
+	useHeaderInitializer("MIIT | My Projects", "My Projects");
 
-	const mockTeams = [
+	const mockProjects = [
 		{
 			id: "1",
 			name: "AuthentiChain: Blockchain-Based Academic Certificate Verifier",
@@ -23,7 +23,7 @@ export default function MyTeams() {
 				role: "Supervisor",
 			},
 			projectCount: 5,
-			status: "approved",
+			status: "under review",
 			createdAt: "2024-01-15",
 		},
 		{
@@ -43,15 +43,36 @@ export default function MyTeams() {
 				role: "Supervisor",
 			},
 			projectCount: 3,
-			status: "approved",
+			status: "completed",
+			createdAt: "2023-11-01",
+		},
+		{
+			id: "3",
+			name: "VisionPass: AI-Powered Smart Parking & Security",
+			description:
+				"Pushing the boundaries of technology with groundbreaking research and development.",
+			members: [
+				{ id: "5", name: "Eve Adams", avatar: "", role: "Team Lead" },
+				{ id: "6", name: "Frank White", avatar: "", role: "Researcher" },
+				{ id: "7", name: "Grace Lee", avatar: "", role: "Data Scientist" },
+			],
+			supervisor: {
+				id: "8",
+				name: "U Yan Naing",
+				avatar: "",
+				role: "Supervisor",
+			},
+			projectCount: 4,
+			status: "not started",
 			createdAt: "2023-11-01",
 		},
 	];
+
 	return (
 		<div className="mx-auto max-w-7xl">
 			<div className="">
 				<h1 className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
-					Team Workspace
+					Projects Workspace
 				</h1>
 				<p className="text-sm text-neutral-500">
 					Oversee your active collaborations, track project status, and
@@ -59,10 +80,10 @@ export default function MyTeams() {
 				</p>
 			</div>
 			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-5">
-				{mockTeams.map((team) => (
-					<TeamCard
-						key={team.id}
-						team={team}
+				{mockProjects.map((project) => (
+					<ProjectCard
+						key={project.id}
+						project={project}
 					/>
 				))}
 			</div>

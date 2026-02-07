@@ -79,6 +79,7 @@ export default function CreateProposalPage() {
 		register,
 		handleSubmit,
 		control,
+		setError,
 		reset,
 		formState: { errors, isSubmitting },
 	} = useForm<z.infer<typeof ProposalSchema>>({
@@ -105,10 +106,21 @@ export default function CreateProposalPage() {
 			members: [...data.members.map((id) => parseInt(id, 10)), authUser?.id],
 			supervisor_id: parseInt(data.supervisor_id, 10),
 		};
-		const res = await api.post("/proposals/create", formattedData);
-		console.log(res);
-		if (res.status === 201) {
-			navigate("/project-proposals/my-proposals");
+
+		try {
+			const res = await api.post("/proposals/create", formattedData);
+			if (res.status === 201) {
+				navigate("/project-proposals/my-proposals");
+			}
+		} catch (error: any) {
+			const validationErrors = error.response?.data?.errors;
+
+			if (validationErrors?.title) {
+				setError("title", {
+					type: "manual",
+					message: validationErrors.title,
+				});
+			}
 		}
 	};
 
@@ -123,79 +135,75 @@ export default function CreateProposalPage() {
 		<>
 			<div className="mx-auto max-w-7xl">
 				<div className="space-y-1 mb-5">
-					<h3 className="text-2xl font-semibold">
-						Submit Your Project Proposal
-					</h3>
+					<h3 className="text-2xl font-semibold">Submit Your Proposal</h3>
 					<p className="text-base text-muted-foreground">
 						Complete the form below to submit your academic project proposal for
 						review
 					</p>
 				</div>
 
-				<Card className="px-6 pb-6 border-gray-200 shadow-sm">
+				<Card className="px-6 py-6 border-gray-200 shadow-sm">
 					<form
 						autoComplete="off"
 						onSubmit={handleSubmit(onSubmit)}>
-						<div className="grid grid-cols-1 @xl/main:grid-cols-2 @5xl/main:grid-cols-2 gap-6">
-							<div className="space-y-5">
-								{/* project name */}
-								<Field>
-									<FieldLabel htmlFor="title">
-										Project Name <span className="text-red-500">*</span>
-									</FieldLabel>
-									<Input
-										id="title"
-										{...register("title")}
-										className="text-sm py-5 placeholder:font-normal placeholder:text-[14px] placeholder:text-muted-foreground/80"
-										placeholder="Enter your project name"
-										type="text"
-									/>
-									{errors.title && (
-										<ErrorMessage error="Project title is required" />
-									)}
-								</Field>
-
-								{/* supervisor selection */}
-								<SupervisorSelection
-									control={control}
-									supervisors={faculties}
-									error={errors.supervisor_id?.message}
+						<div className="space-y-5">
+							{/* project name */}
+							<Field>
+								<FieldLabel
+									htmlFor="title"
+									className="md:text-base">
+									Project Name <span className="text-red-500">*</span>
+								</FieldLabel>
+								<Input
+									id="title"
+									{...register("title")}
+									className="py-5 md:text-base placeholder:font-normal  placeholder:text-muted-foreground/80"
+									placeholder="Enter your project name"
+									type="text"
 								/>
+								{errors.title && <ErrorMessage error={errors.title.message} />}
+							</Field>
 
-								{/* team member selection */}
-								<MembersSelection
-									control={control}
-									members={students}
-									error={errors.members?.message}
+							{/* project description */}
+							<Field>
+								<FieldLabel
+									htmlFor="description"
+									className="md:text-base">
+									Project Description <span className="text-red-500">*</span>
+								</FieldLabel>
+								<Textarea
+									id="description"
+									{...register("description")}
+									className="min-h-48 md:text-base placeholder:font-normal  placeholder:text-muted-foreground/80"
+									placeholder="Describe your project, its objectives, scope, and expected outcomes"
 								/>
-							</div>
+								{errors.description && (
+									<ErrorMessage error={errors.description.message} />
+								)}
+							</Field>
 
-							<div className="space-y-5">
-								<Field>
-									<FieldLabel htmlFor="description">
-										Project Description <span className="text-red-500">*</span>
-									</FieldLabel>
-									<Textarea
-										id="description"
-										{...register("description")}
-										className="min-h-[228px] text-sm h-auto placeholder:font-normal placeholder:text-[14px] placeholder:text-muted-foreground/80"
-										placeholder="Describe your project, its objectives, scope, and expected outcomes"
-									/>
-									{errors.description && (
-										<ErrorMessage error={errors.description.message} />
-									)}
-								</Field>
-							</div>
-						</div>
-						<div className="my-3">
-							<FileUpload
-								ref={fileUploadRef}
+							{/* supervisor selection */}
+							<SupervisorSelection
 								control={control}
-								error={errors.fileUrl?.message}
+								supervisors={faculties}
+								error={errors.supervisor_id?.message}
+							/>
+
+							{/* team member selection */}
+							<MembersSelection
+								control={control}
+								members={students}
+								error={errors.members?.message}
 							/>
 						</div>
 
-						<div className="flex flex-col sm:flex-row items-center justify-end gap-3">
+						<FileUpload
+							ref={fileUploadRef}
+							control={control}
+							error={errors.fileUrl?.message}
+						/>
+
+						<div className="flex flex-col sm:flex-row items-center justify-end gap-3 mt-5">
 							<Button
 								type="button"
 								disabled={isSubmitting}

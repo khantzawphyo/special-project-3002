@@ -30,6 +30,7 @@ const FileUpload = forwardRef<FileUploadHandle, Props>(
 		const [isUploading, setIsUploading] = useState(false);
 		const [progress, setProgress] = useState(0);
 		const [fileName, setFileName] = useState<string | null>(null);
+		const [fileUrlError, setFileUrlError] = useState<string | null>(null);
 
 		useImperativeHandle(ref, () => ({
 			async clear() {
@@ -83,12 +84,12 @@ const FileUpload = forwardRef<FileUploadHandle, Props>(
 						nprogress.set(Math.min(1, Math.max(0, percentCompleted / 100)));
 					},
 				});
-
 				setFileUrl(response.data.url);
 				setProgress(100);
 				nprogress.set(1);
-			} catch (err) {
-				console.error("Upload Error:", err);
+				setFileUrlError(null);
+			} catch (err: any) {
+				setFileUrlError(err?.response?.data?.message);
 				setFileName(null);
 			} finally {
 				setIsUploading(false);
@@ -121,7 +122,9 @@ const FileUpload = forwardRef<FileUploadHandle, Props>(
 
 		return (
 			<Field className="mt-5">
-				<FieldLabel htmlFor="proposal">
+				<FieldLabel
+					htmlFor="proposal"
+					className="md:text-base">
 					Project Documents <span className="text-red-500">*</span>
 				</FieldLabel>
 
@@ -203,7 +206,9 @@ const FileUpload = forwardRef<FileUploadHandle, Props>(
 					)}
 				</div>
 
-				{error && <ErrorMessage error={error} />}
+				{(error || fileUrlError) && (
+					<ErrorMessage error={fileUrlError || error} />
+				)}
 			</Field>
 		);
 	},
