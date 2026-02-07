@@ -24,19 +24,38 @@ export const HasRole = (role: UserRole): boolean => {
 	return authUser?.role === role;
 };
 
-export const STATUS_COLOR = (
-	status: "approved" | "rejected" | "pending" | "active" | "completed",
-) => {
-	switch (status) {
-		case "active":
-			return "bg-green-100 text-green-800 border-green-200";
-		case "approved":
-			return "bg-green-100 text-green-800 border-green-200";
-		case "completed":
-			return "bg-green-100 text-green-800 border-green-200";
-		case "rejected":
-			return "bg-red-100 text-red-800 border-red-200";
-		default:
-			return "bg-yellow-100 text-yellow-800 border-yellow-200";
-	}
+export type ProposalStatus = "pending" | "rejected" | "approved";
+
+export const PROPOSAL_STATUS_COLOR = (status: ProposalStatus): string => {
+	const styles: Record<ProposalStatus, string> = {
+		pending:
+			"bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-800",
+		rejected:
+			"bg-red-100 text-red-800 border-red-200 dark:bg-red-900/30 dark:text-red-400 dark:border-red-800",
+		approved:
+			"bg-emerald-100 text-emerald-800 border-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-400 dark:border-emerald-800",
+	};
+
+	return styles[status] || "bg-gray-100 text-gray-800 border-gray-200";
+};
+
+export type ProjectStatus =
+	| "not started"
+	| "active"
+	| "under review"
+	| "completed";
+
+export const PROJECT_STATUS_COLOR = (status: ProjectStatus): string => {
+	const styles: Record<ProjectStatus, string> = {
+		"not started":
+			"bg-neutral-100 text-neutral-800 border-neutral-200 dark:bg-neutral-900/30 dark:text-neutral-400 dark:border-neutral-800",
+		active:
+			"bg-emerald-100 text-emerald-800 border-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-400 dark:border-emerald-800",
+		"under review":
+			"bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-800",
+		completed:
+			"bg-emerald-100 text-emerald-800 border-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-400 dark:border-emerald-800",
+	};
+
+	return styles[status] || "bg-gray-100 text-gray-800 border-gray-200";
 };

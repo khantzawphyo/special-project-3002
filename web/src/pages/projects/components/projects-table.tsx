@@ -18,7 +18,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { cn, STATUS_COLOR } from "@/lib/utils";
+import { cn, PROJECT_STATUS_COLOR } from "@/lib/utils";
 import type { ProjectData } from "@/types";
 import { IconDownload, IconRefresh } from "@tabler/icons-react";
 import { Eye, Search, Settings2, ShieldCheckIcon } from "lucide-react";
@@ -163,9 +163,9 @@ export default function ProjectsTable({
 
 					{/* Table */}
 					<div className="rounded-lg border border-border">
-						<Table>
-							<TableHeader className="bg-muted">
-								<TableRow>
+						<Table className="rounded-lg">
+							<TableHeader>
+								<TableRow className="bg-muted">
 									{visibleColumns.has("name") && (
 										<TableHead>Project Name</TableHead>
 									)}
@@ -254,7 +254,7 @@ export default function ProjectsTable({
 												<TableCell>
 													<Badge
 														className={cn(
-															STATUS_COLOR("active"),
+															PROJECT_STATUS_COLOR("active"),
 															"px-3 font-mono rounded-md capitalize",
 														)}>
 														{project.status}

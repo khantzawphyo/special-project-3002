@@ -23,12 +23,19 @@ class ProposalRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required',
+            'title' => 'required|unique:proposals,title',
             'description' => 'required',
             'fileUrl' => 'required',
             'members' => 'required',
             'student_id' => 'required|exists:users,id',
             'supervisor_id' => 'required|exists:users,id'
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'title.unique' => 'The proposal title has already been taken.',
         ];
     }
 

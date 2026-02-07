@@ -26,7 +26,7 @@ export default function AccountLogout() {
 
 	return (
 		<Card className="py-5">
-			<div className="px-5 flex items-start justify-between">
+			<div className="px-5 flex flex-col gap-3 sm:flex-row items-start justify-between">
 				<div>
 					<h3 className="font-semibold">Account</h3>
 					<FieldDescription className="text-sm">

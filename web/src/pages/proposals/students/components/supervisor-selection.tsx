@@ -40,7 +40,9 @@ export default function SupervisorSelection({
 
 	return (
 		<Field>
-			<FieldLabel htmlFor="supervisor">
+			<FieldLabel
+				htmlFor="supervisor"
+				className="md:text-base">
 				Project Supervisor <span className="text-red-500">*</span>
 			</FieldLabel>
 			<div className="flex flex-wrap gap-3 mb-3">

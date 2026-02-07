@@ -61,7 +61,7 @@ export function AdminCards({
 						key={card.description}
 						className="@container/card hover:cursor-pointer ">
 						<CardHeader>
-							<CardDescription className="font-medium text-md text-black dark:text-neutral-100 flex items-center justify-between">
+							<CardDescription className="font-medium text-base text-black dark:text-neutral-100 flex items-center justify-between">
 								{card.description}
 								{card.cardIcon && <card.cardIcon size={20} />}
 							</CardDescription>

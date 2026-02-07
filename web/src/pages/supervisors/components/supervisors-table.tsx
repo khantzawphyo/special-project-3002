@@ -18,7 +18,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { cn, STATUS_COLOR } from "@/lib/utils";
+import { cn, PROJECT_STATUS_COLOR } from "@/lib/utils";
 import type { SupervisorData } from "@/types";
 import { IconDownload, IconRefresh } from "@tabler/icons-react";
 import { Eye, Search, Settings2, ShieldCheckIcon } from "lucide-react";
@@ -253,7 +253,7 @@ export default function SupervisorsTable({
 												<TableCell>
 													<Badge
 														className={cn(
-															STATUS_COLOR("active"),
+															PROJECT_STATUS_COLOR("active"),
 															"px-3 font-mono rounded-md capitalize",
 														)}>
 														{supervisor.status}

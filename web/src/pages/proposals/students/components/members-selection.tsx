@@ -18,7 +18,9 @@ interface Props {
 export default function MembersSelection({ control, error, members }: Props) {
 	return (
 		<Field>
-			<FieldLabel htmlFor="members">
+			<FieldLabel
+				htmlFor="members"
+				className="md:text-base">
 				Team Members <span className="text-red-500">*</span>
 			</FieldLabel>
 

@@ -5,7 +5,7 @@ export default function ErrorMessage({
 	error,
 	className,
 }: {
-	error?: string;
+	error?: string | null;
 	className?: string;
 }) {
 	return (

@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-import { cn, HasRole, STATUS_COLOR } from "@/lib/utils";
+import { cn, HasRole, PROPOSAL_STATUS_COLOR } from "@/lib/utils";
 
 import {
 	ArrowLeftIcon,
@@ -48,6 +48,7 @@ export default function ProposalDetail() {
 			const res = await api.get(`/proposals/${slug}/detail`);
 			if (res.status === 200) {
 				setLoading(false);
+				console.log(res.data);
 				setProposal(res.data);
 			} else if (res.status === 404) {
 				setLoading(false);
@@ -135,7 +136,7 @@ export default function ProposalDetail() {
 									<div className="mt-2 flex flex-wrap items-center gap-3 text-sm">
 										<Badge
 											className={cn(
-												STATUS_COLOR(proposal.status),
+												PROPOSAL_STATUS_COLOR(proposal.status),
 												"font-mono capitalize px-3 rounded-md",
 											)}>
 											{proposal.status}
@@ -176,11 +177,7 @@ export default function ProposalDetail() {
 											Project Description
 										</CardTitle>
 									</CardHeader>
-									<CardContent className="space-y-3">
-										{proposal.description.split("\n").map((line, i) => (
-											<p key={i}>{line}</p>
-										))}
-									</CardContent>
+									<CardContent>{proposal.description}</CardContent>
 								</Card>
 
 								<Card className="border-gray-200 shadow-sm">
@@ -197,7 +194,7 @@ export default function ProposalDetail() {
 													<DocumentTextIcon className="size-7 text-primary-600" />
 												</div>
 												<div>
-													<p className="font-medium ">Proposal.pdf</p>
+													<p className="font-medium ">proposal.pdf</p>
 													<p className="text-sm  ">
 														Submitted on {proposal.submitted_at}
 													</p>
@@ -206,9 +203,9 @@ export default function ProposalDetail() {
 
 											<Button
 												asChild
-												className="gap-2 bg-primary-600 font-semibold text-white hover:bg-primary-500">
+												className="gap-2 bg-primary-600 font-semibold text-white hover:bg-primary-500 hover:cursor-pointer">
 												<a
-													href={proposal.fileUrl}
+													href={proposal.file}
 													target="_blank"
 													rel="noopener noreferrer"
 													download>

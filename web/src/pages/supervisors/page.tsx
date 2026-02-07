@@ -7,7 +7,7 @@ import UnAuthorized from "../auth/un-authorized";
 import SupervisorsTable from "./components/supervisors-table";
 
 export default function SupervisorsPage() {
-	useHeaderInitializer("MIIT| Supervisors", "Project Supervisors");
+	useHeaderInitializer("MIIT| Supervisors", "Assigned Supervisors");
 	const [supervisorData, setSupervisorData] = useState<SupervisorData[] | null>(
 		[],
 	);
@@ -26,7 +26,7 @@ export default function SupervisorsPage() {
 	return (
 		<div className="mx-auto max-w-7xl">
 			<h1 className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
-				Supervisors List ( 2025-2026 I Sem )
+				Supervisors
 			</h1>
 			<p className="text-sm text-neutral-500">
 				Browse and manage project supervisors with their assignments and

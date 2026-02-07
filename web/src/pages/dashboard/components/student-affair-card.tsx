@@ -1,7 +1,6 @@
 import {
 	IconFileDescription,
 	IconListDetails,
-	IconTrendingUp,
 	IconUsersGroup,
 	type Icon,
 } from "@tabler/icons-react";
@@ -9,7 +8,6 @@ import {
 import {
 	Card,
 	CardDescription,
-	CardFooter,
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
@@ -33,32 +31,24 @@ export function StudentAffairCard() {
 			title: 2,
 			cardIcon: IconListDetails,
 			description: "Total Projects",
-			footerTop: "Project activity increasing this month",
-			footerBottom: "Overall workload remains stable",
 			pageUrl: "/projects",
 		},
 		{
 			title: 3,
 			cardIcon: IconFileDescription,
 			description: "Tota Proposals",
-			footerTop: "Project activity increasing this month",
-			footerBottom: "Overall workload remains stable",
 			pageUrl: "/project-proposals",
 		},
 		{
 			title: 12,
 			cardIcon: IconUsersGroup,
-			description: "Total Teams",
-			footerTop: "Project activity increasing this month",
-			footerBottom: "Overall workload remains stable",
+			description: "Active Students",
 			pageUrl: "/supervisors",
 		},
 		{
 			title: 10,
 			cardIcon: ShieldCheckIcon,
 			description: "Total Supervisors",
-			footerTop: "Project activity increasing this month",
-			footerBottom: "Overall workload remains stable",
 			pageUrl: "/",
 		},
 	];
@@ -80,13 +70,6 @@ export function StudentAffairCard() {
 								{card.title}
 							</CardTitle>
 						</CardHeader>
-						<CardFooter className="flex-col items-start gap-1.5 text-sm">
-							<div className="line-clamp-1 hidden gap-2 font-medium">
-								{card.footerTop}
-								<IconTrendingUp className="hidden size-4" />
-							</div>
-							<div className="text-muted-foreground">{card.footerBottom}</div>
-						</CardFooter>
 					</Card>
 				))}
 		</div>

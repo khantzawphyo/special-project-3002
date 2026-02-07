@@ -18,7 +18,7 @@ return new class extends Migration
             $table->text('description');
             $table->text('mid_report')->nullable();
             $table->text('final_report')->nullable();
-            $table->enum('status', ['active', 'completed', 'under review'])->default('active');
+            $table->enum('status', ['not started', 'active', 'completed', 'under review'])->default('not started');
             $table->timestamp('start_date');
             $table->timestamp('end_date')->nullable();
             $table->foreignId('leader_id')->constrained('users')->cascadeOnDelete();

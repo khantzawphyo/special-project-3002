@@ -72,8 +72,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 			icon: IconDeviceTabletSearch,
 		},
 		{
-			title: "My Projects",
-			url: "/my-projects",
+			title: "Assigned Projects",
+			url: "/assigned-projects",
 			icon: IconListDetails,
 		},
 		{
@@ -131,11 +131,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 			title: "Projects",
 			url: "/projects",
 			icon: IconListDetails,
-		},
-		{
-			title: "Teams",
-			url: "/teams",
-			icon: IconUsersGroup,
 		},
 		{
 			title: "Settings",

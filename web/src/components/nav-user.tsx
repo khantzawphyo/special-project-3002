@@ -79,7 +79,7 @@ export function NavUser({
 									</AvatarFallback>
 								)}
 							</Avatar>
-							<div className="grid flex-1 text-left text-sm leading-tight">
+							<div className="flex-1 hidden md:grid text-left text-sm leading-tight">
 								<span className="truncate font-medium">{user.name}</span>
 								<span className="text-muted-foreground truncate text-xs">
 									{user.email}
@@ -92,7 +92,7 @@ export function NavUser({
 						side={isMobile ? "bottom" : "bottom"}
 						align="end"
 						sideOffset={4}>
-						<DropdownMenuLabel className="p-0 font-normal">
+						<DropdownMenuLabel className="p-0 font-normal md:hidden">
 							<div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
 								<Avatar className="h-10 w-10 hidden rounded-full">
 									{user.avatar !== null ? (
@@ -116,7 +116,7 @@ export function NavUser({
 								</div>
 							</div>
 						</DropdownMenuLabel>
-						<DropdownMenuSeparator />
+						<DropdownMenuSeparator className="md:hidden" />
 						<DropdownMenuGroup>
 							<DropdownMenuItem className="hover:cursor-pointer">
 								<IconUserCircle />
